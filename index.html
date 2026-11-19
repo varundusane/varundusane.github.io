@@ -94,6 +94,14 @@
         background: var(--chip-bg); color: var(--chip-ink); border-radius: 6px; padding: 7px 11px;
       }
       .hero .seeking { margin: 20px 0 0; color: var(--hero-muted); font-size: .93rem; max-width: 700px; }
+      .hero-main { display: flex; gap: 36px; align-items: flex-start; }
+      .hero-text { flex: 1 1 auto; min-width: 0; }
+      .hero-photo { flex: none; margin: 4px 0 0; }
+      .hero-photo img {
+        display: block; width: 228px; height: 228px; object-fit: cover; background: #ffffff;
+        border-radius: 16px; border: 1px solid var(--hero-line);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, .35);
+      }
 
       /* ---------- Nav ---------- */
       nav.toc {
@@ -171,6 +179,9 @@
         main section { scroll-margin-top: 104px; }
         .hero h1 { font-size: 2rem; }
         .hero .role { font-size: 1.05rem; }
+        .hero-main { flex-direction: column; gap: 20px; }
+        .hero-photo { order: -1; margin: 0; }
+        .hero-photo img { width: 148px; height: 148px; border-radius: 14px; }
         header.hero { padding: 38px 0 32px; }
         .job .when { white-space: normal; }
       }
@@ -183,6 +194,8 @@
     <header class="hero">
       <div class="wrap">
         <p class="status">Open to new roles — remote India · hybrid Mumbai / Bengaluru</p>
+        <div class="hero-main">
+        <div class="hero-text">
         <h1>Varun Dusane</h1>
         <p class="role">Lead DevOps Engineer · Platform Engineering · AI Infrastructure</p>
         <p class="lede">8+ years designing, automating and modernising enterprise cloud platforms across Azure, AWS and GCP — Infrastructure as Code, Kubernetes, GitOps and CI/CD, plus production AI-assisted engineering with LLMs, RAG, MCP and AI agents. Based in Pune, India.</p>
@@ -200,6 +213,9 @@
           <li>Pune, India · Notice 45 days</li>
         </ul>
         <p class="seeking">Currently Lead DevOps Engineer at Ingram Micro (since June 2021). Seeking AI Infrastructure / AI Platform and senior platform roles — fully remote from India, or hybrid in Mumbai / Bengaluru.</p>
+        </div>
+        <figure class="hero-photo"><img src="profile.jpg" alt="Varun Dusane — Lead DevOps Engineer" width="1100" height="1100" /></figure>
+        </div>
       </div>
     </header>
 
