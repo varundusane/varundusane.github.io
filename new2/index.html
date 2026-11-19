@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<meta name="description" content="Varun Dusane — Lead DevOps Engineer. Platform engineering and AI infrastructure across Azure, AWS and GCP." />
+<link rel="icon" href="data:," />
+<title>Varun Dusane — Lead DevOps Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#f7f6f2;
+    --bg-soft:#efeee8;
+    --ink:#10222e;
+    --ink-soft:#43565f;
+    --muted:#75858d;
+    --line:#dddcd2;
+    --navy:#0e2a3f;
+    --teal:#0e7a74;
+    --teal-bright:#0b948b;
+    --teal-soft:#e0efec;
+    --card:#ffffff;
+    --card-line:#e3e2d9;
+    --chip:#f0f2ee;
+    --nav-bg:rgba(255,255,255,.92);
+    --ok:#1a9e63;
+    --shadow:0 24px 60px rgba(14,42,63,.12);
+    --shadow-sm:0 10px 30px rgba(14,42,63,.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0c1620;
+      --bg-soft:#0a121b;
+      --ink:#eef4f2;
+      --ink-soft:#bfcfd6;
+      --muted:#8fa3ad;
+      --line:#223644;
+      --navy:#e8f1ef;
+      --teal:#4cc2b8;
+      --teal-bright:#4cc2b8;
+      --teal-soft:#123231;
+      --card:#12242f;
+      --card-line:#223644;
+      --chip:#162c3a;
+      --nav-bg:rgba(13,26,36,.92);
+      --ok:#3ecf8e;
+      --shadow:0 24px 60px rgba(0,0,0,.45);
+      --shadow-sm:0 10px 30px rgba(0,0,0,.35);
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+    font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img{max-width:100%;display:block}
+  a{color:inherit}
+  :focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:6px}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+  section[id],footer[id]{scroll-margin-top:118px}
+  .mono{font-family:"IBM Plex Mono",monospace}
+
+  /* ---------- Section label (reference style: dash + tracked caps) ---------- */
+  .label{
+    display:flex;align-items:center;gap:14px;
+    font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;
+    letter-spacing:.22em;text-transform:uppercase;color:var(--teal);margin:0 0 26px;
+  }
+  .label::before{content:"";width:34px;height:2px;background:var(--teal);flex:none}
+
+  /* ---------- Floating pill nav (reference style) ---------- */
+  .nav-float{position:sticky;top:14px;z-index:50;padding:0 16px}
+  .nav-pill{
+    max-width:1060px;margin:0 auto;background:var(--nav-bg);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border:1px solid var(--card-line);border-radius:999px;box-shadow:var(--shadow-sm);
+    display:flex;align-items:center;gap:10px;padding:8px 10px 8px 12px;flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:center;gap:11px;text-decoration:none;margin-right:auto;min-height:44px}
+  .brand-mark{
+    width:42px;height:42px;border-radius:12px;flex:none;
+    border:1.5px solid var(--teal);color:var(--teal);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:19px;background:var(--card);
+  }
+  .brand b{display:block;font-size:15.5px;line-height:1.15;letter-spacing:-.01em}
+  .brand .brand-role{display:block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .nav-links{display:flex;gap:2px;flex-wrap:wrap}
+  .nav-links a{
+    text-decoration:none;font-size:14.5px;font-weight:500;color:var(--ink-soft);
+    padding:10px 14px;min-height:44px;display:inline-flex;align-items:center;border-radius:999px;
+  }
+  .nav-links a:hover{color:var(--ink)}
+  .nav-links a.active{color:var(--ink);box-shadow:inset 0 -2px 0 var(--teal)}
+  .nav-cta{
+    background:var(--navy);color:var(--bg);text-decoration:none;
+    font-size:14px;font-weight:600;padding:12px 22px;min-height:46px;
+    display:inline-flex;align-items:center;gap:8px;border-radius:999px;white-space:nowrap;
+  }
+  @media (prefers-color-scheme: dark){.nav-cta{background:#e8f1ef;color:#0d1821}}
+  .nav-cta:hover{opacity:.88}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:64px 0 30px;position:relative}
+  .avail{
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    font-size:14px;color:var(--ink-soft);margin:0 0 34px;
+  }
+  .avail .dot{width:9px;height:9px;border-radius:50%;background:var(--ok);flex:none;box-shadow:0 0 0 4px color-mix(in srgb,var(--ok) 22%,transparent)}
+  .avail .sep{color:var(--muted)}
+  .avail .caps{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase}
+  .hero-grid{display:grid;grid-template-columns:1.55fr .8fr;gap:56px;align-items:start}
+  h1{
+    font-size:clamp(44px,6.4vw,84px);line-height:1.04;font-weight:700;
+    letter-spacing:-.03em;margin:0 0 34px;
+  }
+  h1 .accent{color:var(--teal)}
+  .tagline{font-size:19px;font-weight:700;letter-spacing:-.01em;margin:0 0 14px}
+  .tagline .dotsep{color:var(--teal);font-weight:700;padding:0 2px}
+  .intro{font-size:17.5px;line-height:1.65;color:var(--ink-soft);max-width:33em;margin:0 0 38px}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:52px}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:54px;
+    padding:14px 28px;border-radius:999px;text-decoration:none;
+    font-size:15px;font-weight:600;
+  }
+  .btn-solid{background:var(--teal);color:#fff}
+  @media (prefers-color-scheme: dark){.btn-solid{color:#08201e}}
+  .btn-solid:hover{background:var(--teal-bright)}
+  .btn-outline{border:1.5px solid var(--line);background:var(--card);color:var(--ink)}
+  .btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+  .trusted{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+  .trusted .t-label{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:14px;
+  }
+  .trusted .t-label::after{content:"";width:44px;height:1px;background:var(--line)}
+  .trusted .t-names{display:flex;gap:26px;flex-wrap:wrap;align-items:baseline}
+  .trusted .t-names span{font-size:19px;font-weight:700;letter-spacing:-.02em;white-space:nowrap}
+  .trusted .t-names span.light{font-weight:600;color:var(--ink-soft)}
+  .trusted .t-names span.mono{font-family:"IBM Plex Mono",monospace;font-weight:500;font-size:16.5px}
+  .portrait-wrap{position:relative}
+  .portrait{
+    border-radius:22px;overflow:hidden;box-shadow:var(--shadow);
+    aspect-ratio:1/1.12;background:#fff;border:1px solid var(--card-line);
+  }
+  .portrait img{width:100%;height:100%;object-fit:cover;object-position:top center}
+  .badge-chip{
+    position:absolute;display:flex;align-items:center;gap:8px;
+    background:var(--card);border:1px solid var(--card-line);border-radius:14px;
+    box-shadow:var(--shadow-sm);padding:11px 15px;
+    font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:600;color:var(--teal);
+  }
+  .badge-chip.tl{top:34px;left:-26px}
+  .badge-chip.br{bottom:52px;right:-22px}
+
+  /* ---------- Generic section ---------- */
+  .section{padding:96px 0}
+  .section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;flex-wrap:wrap;margin-bottom:54px}
+  .section-head h2{
+    font-size:clamp(34px,4.6vw,58px);line-height:1.1;font-weight:700;
+    letter-spacing:-.028em;margin:0;max-width:13em;
+  }
+  .section-head .sub{font-size:17px;color:var(--ink-soft);margin:16px 0 0;max-width:36em}
+  .pill-link{
+    display:inline-flex;align-items:center;gap:9px;min-height:50px;padding:12px 24px;
+    border:1.5px solid var(--line);border-radius:999px;background:var(--card);
+    text-decoration:none;font-size:14.5px;font-weight:600;white-space:nowrap;
+  }
+  .pill-link:hover{border-color:var(--teal);color:var(--teal)}
+
+  /* ---------- Selected Work cards (reference style) ---------- */
+  .work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .proj{
+    background:var(--card);border:1px solid var(--card-line);border-radius:20px;
+    overflow:hidden;display:flex;flex-direction:column;box-shadow:var(--shadow-sm);
+  }
+  .proj-visual{border-bottom:1px solid var(--card-line);min-height:252px;display:flex;flex-direction:column;background:var(--card)}
+  .proj-body{padding:24px 24px 26px;display:flex;flex-direction:column;flex:1}
+  .proj-meta{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:10px}
+  .proj-cat{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--teal)}
+  .proj-year{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted)}
+  .proj h3{font-size:23px;font-weight:700;letter-spacing:-.02em;margin:0 0 10px;line-height:1.2}
+  .proj p{font-size:15px;line-height:1.65;color:var(--ink-soft);margin:0 0 18px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+  .chip{
+    font-size:12.5px;font-weight:500;padding:6px 13px;min-height:32px;
+    display:inline-flex;align-items:center;border:1px solid var(--card-line);
+    border-radius:999px;background:var(--chip);color:var(--ink-soft);
+  }
+  .view-all-row{text-align:center;margin-top:46px}
+  .view-all-row a{font-weight:600;font-size:15.5px;text-decoration:none;display:inline-flex;gap:9px;align-items:center;min-height:44px;padding:8px 10px}
+  .view-all-row a:hover{color:var(--teal)}
+
+  /* mini visuals inside project cards (carried from the /new edition) */
+  .v-head{display:flex;align-items:center;gap:9px;padding:13px 16px;border-bottom:1px solid var(--card-line);font-size:13px;font-weight:600}
+  .v-dot{width:8px;height:8px;border-radius:50%;background:var(--ok);flex:none}
+  .v-body{padding:16px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .bubble{max-width:92%;padding:9px 12px;border-radius:11px;font-size:13px;line-height:1.5}
+  .bubble.user{align-self:flex-end;background:var(--navy);color:var(--bg);border-bottom-right-radius:4px}
+  @media (prefers-color-scheme: dark){.bubble.user{background:#e8f1ef;color:#0d1821}}
+  .bubble.bot{align-self:flex-start;background:var(--chip);border-bottom-left-radius:4px}
+  .bubble .who{display:block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);margin-bottom:3px}
+  .bubble .okline{color:var(--ok);font-weight:600}
+  .term{font-family:"IBM Plex Mono",monospace;font-size:12.5px;line-height:1.95;padding:16px 16px 10px;color:var(--ink-soft);flex:1}
+  .term .c-teal{color:var(--teal);font-weight:500}
+  .term .c-ok{color:var(--ok)}
+  .term .c-dim{color:var(--muted)}
+  .tiles{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:0 16px 16px}
+  .tile{background:var(--chip);border-radius:11px;padding:12px 8px;text-align:center}
+  .tile b{display:block;font-size:15px;letter-spacing:-.01em}
+  .tile span{font-size:10.5px;color:var(--muted);font-family:"IBM Plex Mono",monospace}
+  .chartbox{padding:18px 16px 6px;flex:1}
+  .chartbox svg{width:100%;height:auto;display:block}
+  .stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:14px 16px 16px}
+  .stat{background:var(--chip);border-radius:11px;padding:11px 8px;text-align:center}
+  .stat b{display:block;font-size:16px;letter-spacing:-.02em}
+  .stat span{font-size:10px;color:var(--muted);font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.05em}
+
+  /* ---------- About ---------- */
+  .about-grid{display:grid;grid-template-columns:.9fr 1.3fr;gap:60px;align-items:start}
+  .about-name{font-size:clamp(46px,5.6vw,74px);line-height:1.02;font-weight:700;letter-spacing:-.03em;margin:0 0 16px}
+  .about-role{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin:0}
+  .about-statement{font-size:clamp(26px,3.4vw,42px);line-height:1.22;font-weight:600;letter-spacing:-.02em;margin:6px 0 26px}
+  .about-cols p{font-size:16.5px;line-height:1.75;color:var(--ink-soft);margin:0 0 18px;max-width:36em}
+  .about-cols p strong{color:var(--ink)}
+
+  /* ---------- Stats strip (reference style) ---------- */
+  .stats{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    border:1px solid var(--card-line);border-radius:20px;background:var(--card);
+    overflow:hidden;box-shadow:var(--shadow-sm);
+  }
+  .statcell{padding:30px 28px 26px;border-left:1px solid var(--card-line)}
+  .statcell:first-child{border-left:0}
+  .statcell .ic{
+    width:42px;height:42px;border-radius:12px;background:var(--teal-soft);color:var(--teal);
+    display:flex;align-items:center;justify-content:center;margin-bottom:18px;
+    font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:15px;
+  }
+  .statcell b{display:block;font-size:42px;font-weight:700;letter-spacing:-.03em;line-height:1}
+  .statcell b i{font-style:normal;color:var(--teal)}
+  .statcell .cap{font-size:15px;font-weight:600;margin:12px 0 4px}
+  .statcell .note{font-size:13px;color:var(--muted);margin:0}
+
+  /* ---------- How I Work ---------- */
+  .principles{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:0 56px}
+  .principles li{border-top:1px solid var(--ink);padding:22px 0 24px}
+  .principles h3{font-size:19px;font-weight:600;margin:0 0 6px;letter-spacing:-.01em}
+  .principles p{font-size:15px;margin:0;color:var(--ink-soft);line-height:1.65}
+
+  /* ---------- What I Do (reference style: numbered rows) ---------- */
+  .services-grid{display:grid;grid-template-columns:.95fr 1.25fr;gap:60px;align-items:start}
+  .services-grid h2{font-size:clamp(34px,4.4vw,56px);line-height:1.1;font-weight:700;letter-spacing:-.028em;margin:0}
+  .cap-count{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--muted);margin-top:22px;display:flex;align-items:center;gap:12px;letter-spacing:.14em;text-transform:uppercase}
+  .cap-count b{font-size:26px;color:var(--ink);letter-spacing:0}
+  .cap-list{border-top:1px solid var(--line)}
+  .cap-row{display:flex;gap:22px;padding:26px 4px;border-bottom:1px solid var(--line);align-items:flex-start}
+  .cap-row .num{font-family:"IBM Plex Mono",monospace;font-size:14px;color:var(--muted);padding-top:4px;flex:none;width:30px}
+  .cap-row .arr{margin-left:auto;color:var(--teal);font-size:18px;flex:none;padding-top:2px}
+  .cap-row h3{font-size:19.5px;font-weight:600;margin:0 0 6px;letter-spacing:-.01em}
+  .cap-row p{font-size:15px;color:var(--ink-soft);margin:0;line-height:1.65;max-width:34em}
+
+  /* ---------- Tech Arsenal (reference style: 3 grouped panels) ---------- */
+  .skills-panel{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    border:1px solid var(--card-line);border-radius:20px;background:var(--card);
+    overflow:hidden;box-shadow:var(--shadow-sm);
+  }
+  .skill-group{padding:28px 28px 30px;border-left:1px solid var(--card-line)}
+  .skill-group:first-child{border-left:0}
+  .skill-group-head{display:flex;align-items:center;gap:12px;padding-bottom:18px;border-bottom:1px solid var(--card-line);margin-bottom:20px}
+  .skill-group-head .ic{
+    width:40px;height:40px;border-radius:11px;background:var(--teal-soft);color:var(--teal);
+    display:flex;align-items:center;justify-content:center;flex:none;
+    font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:13px;
+  }
+  .skill-group-head h3{font-size:17.5px;font-weight:600;margin:0;letter-spacing:-.01em}
+  .skill-group-head .count{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:14px;color:var(--muted)}
+  .skill-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+  .skill-list li{display:flex;align-items:center;gap:11px;font-size:15px;padding:8px 2px;min-height:40px}
+  .skill-list .sdot{width:7px;height:7px;border-radius:2px;background:var(--teal);flex:none;opacity:.75}
+  .skill-list .yrs{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--teal);white-space:nowrap}
+
+  /* ---------- Experience cards (certificate-card style) ---------- */
+  .exp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .exp-card{
+    background:var(--card);border:1px solid var(--card-line);border-radius:20px;
+    padding:14px 14px 24px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;
+  }
+  .exp-doc{
+    border:1px solid var(--card-line);border-radius:13px;background:var(--bg);
+    padding:26px 24px 22px;min-height:218px;display:flex;flex-direction:column;
+  }
+  .exp-doc .co{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+  .exp-doc h3{font-size:21px;font-weight:700;letter-spacing:-.015em;line-height:1.25;margin:0 0 10px}
+  .exp-doc p{font-size:14px;line-height:1.6;color:var(--ink-soft);margin:0}
+  .exp-doc .seal{
+    margin-top:auto;padding-top:18px;display:flex;align-items:center;gap:10px;
+    font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);
+  }
+  .exp-doc .seal::before{content:"";width:26px;height:26px;border-radius:50%;border:2px solid var(--teal);flex:none;
+    background:radial-gradient(circle,var(--teal) 0 4px,transparent 5px)}
+  .exp-meta{padding:20px 10px 0}
+  .exp-meta .role-line{font-size:16.5px;font-weight:700;letter-spacing:-.01em;margin:0 0 6px}
+  .exp-meta .where{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 14px}
+  .exp-meta a{
+    font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--teal);text-decoration:none;
+    display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:6px 0;
+  }
+  .exp-meta a:hover{text-decoration:underline;text-underline-offset:4px}
+
+  /* ---------- Chat With Me / Contact ---------- */
+  .contact-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:64px;align-items:start}
+  .contact-grid h2{font-size:clamp(38px,5vw,64px);line-height:1.06;font-weight:700;letter-spacing:-.03em;margin:0 0 26px}
+  .contact-lede{font-size:17px;line-height:1.7;color:var(--ink-soft);margin:0 0 34px;max-width:30em;border-top:1px solid var(--line);padding-top:26px}
+  .avail-card{
+    background:var(--card);border:1px solid var(--card-line);border-left:4px solid var(--ok);
+    border-radius:16px;padding:22px 24px;margin-bottom:38px;box-shadow:var(--shadow-sm);
+  }
+  .avail-card .a-label{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+  .avail-card .a-label b{color:var(--teal);font-weight:600}
+  .avail-card .a-status{display:flex;align-items:center;gap:11px;font-size:19px;font-weight:700;margin:0 0 6px}
+  .avail-card .a-status .dot{width:10px;height:10px;border-radius:50%;background:var(--ok);flex:none}
+  .avail-card p{font-size:14.5px;color:var(--ink-soft);margin:0}
+  .channels-label{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+  .channels-label b{color:var(--teal);font-weight:600}
+  .channel{
+    display:flex;align-items:center;gap:14px;text-decoration:none;
+    padding:15px 2px;border-bottom:1px solid var(--line);min-height:56px;
+    font-family:"IBM Plex Mono",monospace;font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;
+  }
+  .channel:first-of-type{border-top:1px solid var(--line)}
+  .channel .n{color:var(--teal);font-size:12px}
+  .channel .arr{margin-left:auto;color:var(--ink-soft);font-size:16px}
+  .channel:hover{color:var(--teal)}
+  .contact-card{
+    background:var(--card);border:1px solid var(--card-line);border-radius:22px;
+    padding:36px 36px 32px;box-shadow:var(--shadow);
+  }
+  .contact-card .cc-label{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+  .contact-card .cc-label b{color:var(--teal)}
+  .contact-card h3{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:0 0 10px}
+  .contact-card>p{font-size:15px;color:var(--ink-soft);margin:0 0 26px;line-height:1.65}
+  .cc-actions{display:flex;flex-direction:column;gap:12px}
+  .cc-btn{
+    display:flex;align-items:center;gap:12px;min-height:56px;padding:14px 22px;
+    border-radius:999px;text-decoration:none;font-size:15.5px;font-weight:600;
+  }
+  .cc-btn.primary{background:var(--teal);color:#fff;justify-content:center}
+  @media (prefers-color-scheme: dark){.cc-btn.primary{color:#08201e}}
+  .cc-btn.primary:hover{background:var(--teal-bright)}
+  .cc-btn.ghost{border:1.5px solid var(--line);color:var(--ink)}
+  .cc-btn.ghost:hover{border-color:var(--teal);color:var(--teal)}
+  .cc-btn .arr{margin-left:auto}
+  .cc-note{font-size:13.5px;color:var(--muted);margin:20px 0 0;text-align:center}
+
+  /* ---------- Footer ---------- */
+  footer{border-top:1px solid var(--line);padding:44px 0 52px;background:var(--bg-soft)}
+  .foot-in{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+  .foot-in .fname{font-weight:700;font-size:16.5px}
+  .foot-in .fcopy{font-size:13.5px;color:var(--muted);margin:0}
+  .to-top{
+    display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-size:14px;font-weight:600;
+    min-height:44px;padding:10px 18px;border:1.5px solid var(--line);border-radius:999px;background:var(--card);
+  }
+  .to-top:hover{border-color:var(--teal);color:var(--teal)}
+
+  /* ---------- Mobile ---------- */
+  @media (max-width:1020px){
+    .work-grid{grid-template-columns:1fr 1fr}
+    .exp-grid{grid-template-columns:1fr 1fr}
+    .stats{grid-template-columns:1fr 1fr}
+    .statcell:nth-child(3){border-left:0}
+    .statcell{border-top:1px solid var(--card-line)}
+    .statcell:nth-child(-n+2){border-top:0}
+  }
+  @media (max-width:860px){
+    .wrap{padding:0 20px}
+    section[id],footer[id]{scroll-margin-top:150px}
+    .nav-pill{border-radius:22px}
+    .nav-links{order:3;width:100%;justify-content:flex-start}
+    .hero{padding:40px 0 10px}
+    .hero-grid{grid-template-columns:1fr;gap:44px}
+    .portrait-wrap{max-width:430px}
+    .badge-chip.tl{left:10px}
+    .badge-chip.br{right:10px}
+    .section{padding:64px 0}
+    .about-grid,.services-grid,.contact-grid{grid-template-columns:1fr;gap:40px}
+    .principles{grid-template-columns:1fr}
+    .skills-panel{grid-template-columns:1fr}
+    .skill-group{border-left:0;border-top:1px solid var(--card-line)}
+    .skill-group:first-child{border-top:0}
+    .contact-card{padding:28px 22px 26px}
+    .btn{flex:1 1 auto}
+  }
+  @media (max-width:600px){
+    .work-grid,.exp-grid,.stats{grid-template-columns:1fr}
+    .statcell{border-left:0;border-top:1px solid var(--card-line)}
+    .statcell:first-child{border-top:0}
+    .trusted .t-names{gap:18px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body id="top">
+
+<!-- Floating pill nav -->
+<div class="nav-float">
+  <div class="nav-pill">
+    <a class="brand" href="#top" aria-label="Varun Dusane — home">
+      <span class="brand-mark" aria-hidden="true">V</span>
+      <span><b>Varun Dusane</b><span class="brand-role">Lead DevOps Engineer</span></span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="#work" class="active">Work</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#skills">Skills</a>
+    </nav>
+    <a class="nav-cta" href="#contact">Contact Me</a>
+  </div>
+</div>
+
+<main>
+
+  <!-- ============ 1. HERO ============ -->
+  <section class="hero">
+    <div class="wrap">
+      <p class="avail">
+        <span class="dot" aria-hidden="true"></span>
+        <span>Available for work</span>
+        <span class="sep" aria-hidden="true">&mdash;</span>
+        <span class="caps">Lead DevOps Engineer / Pune, India</span>
+      </p>
+      <div class="hero-grid">
+        <div>
+          <h1>I build platforms that hold together <span class="accent">when production doesn&rsquo;t.</span></h1>
+          <p class="tagline">Cloud <span class="dotsep">&middot;</span> Kubernetes <span class="dotsep">&middot;</span> AI <span class="dotsep">&middot;</span> Platform Thinking</p>
+          <p class="intro">8+ years across Azure, AWS and GCP &mdash; Terraform, Kubernetes, GitOps, CI/CD and AI platform engineering. I care about systems that stay reliable, teams that stay unblocked, and automation that removes the repetitive work. Based in Pune &mdash; open to remote roles across India and hybrid roles in Mumbai / Bengaluru.</p>
+          <div class="cta-row">
+            <a class="btn btn-solid" href="#contact">Let&rsquo;s talk <span aria-hidden="true">&rarr;</span></a>
+            <a class="btn btn-outline" href="#work">View Projects <span aria-hidden="true">&#8599;</span></a>
+            <a class="btn btn-outline" href="assets/Varun_Dusane_CV.pdf" download="Varun_Dusane_CV.pdf">Download CV <span aria-hidden="true">&darr;</span></a>
+          </div>
+          <div class="trusted">
+            <span class="t-label">Previously at</span>
+            <div class="t-names">
+              <span>Ingram Micro</span>
+              <span class="light">Magmarkd</span>
+              <span class="mono">TechnoInnovation</span>
+            </div>
+          </div>
+        </div>
+        <div class="portrait-wrap">
+          <div class="portrait">
+            <img src="assets/profile.jpg" alt="Portrait of Varun Dusane" width="1100" height="1100" />
+          </div>
+          <span class="badge-chip tl" aria-hidden="true">&lt;/&gt; Azure &middot; AWS &middot; GCP</span>
+          <span class="badge-chip br" aria-hidden="true">&#10003; 8+ years in production</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2. SELECTED WORK ============ -->
+  <section class="section" id="work">
+    <div class="wrap">
+      <p class="label">Selected Work</p>
+      <div class="section-head">
+        <div>
+          <h2>A selection of work I am proud of</h2>
+          <p class="sub">A few systems built with equal attention to utility, scale, and reliability.</p>
+        </div>
+        <a class="pill-link" href="https://varundusane.github.io/" target="_blank" rel="noopener noreferrer">View All Projects <span aria-hidden="true">&rarr;</span></a>
+      </div>
+
+      <div class="work-grid">
+
+        <!-- OpsPilot -->
+        <article class="proj">
+          <div class="proj-visual" role="img" aria-label="Illustration of a Microsoft Teams chat where an operator asks OpsPilot to restart a service and gets a confirmed result">
+            <div class="v-head"><span class="v-dot"></span> Microsoft Teams &mdash; OpsPilot</div>
+            <div class="v-body">
+              <div class="bubble user">Restart the payments service on SRV01</div>
+              <div class="bubble bot"><span class="who">OpsPilot &middot; Reactive</span>On it &mdash; checking guardrails, then restarting the service.</div>
+              <div class="bubble bot"><span class="who">OpsPilot</span><span class="okline">Done &#10003;</span> Restarted and verified healthy. Full trail saved to the audit log.</div>
+              <div class="bubble bot"><span class="who">OpsPilot &middot; Proactive</span>Fixed a disk-pressure issue overnight and verified it &mdash; no one had to ask.</div>
+            </div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-meta"><span class="proj-cat">AI Platform &middot; Teams</span><span class="proj-year">Ingram Micro</span></div>
+            <h3>OpsPilot</h3>
+            <p>An AI SRE assistant inside Microsoft Teams. Operators run infrastructure operations in plain language (Reactive), and routine issues get fixed with pre-approved safe fixes and reported back in Teams (Proactive) &mdash; cutting routine tasks from an estimated 30&ndash;60 minutes to 2&ndash;5 minutes.</p>
+            <div class="chips">
+              <span class="chip">Django</span>
+              <span class="chip">PowerShell Agents</span>
+              <span class="chip">Guardrails &amp; Audit</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Ingram Micro platform -->
+        <article class="proj">
+          <div class="proj-visual" role="img" aria-label="Illustration of a Terraform terminal session planning infrastructure changes across Azure, AWS and GCP">
+            <div class="v-head"><span class="v-dot"></span> terraform &mdash; platform framework</div>
+            <div class="term">
+              <div><span class="c-dim">$</span> terraform plan <span class="c-dim">-out=release.tfplan</span></div>
+              <div><span class="c-teal">module.aks_cluster</span> &hellip; 3 to change</div>
+              <div><span class="c-teal">module.apim</span> &hellip; 1 to add</div>
+              <div>Plan: <span class="c-ok">4 to add, 3 to change, 0 to destroy</span></div>
+              <div><span class="c-dim">$</span> terraform apply release.tfplan</div>
+              <div><span class="c-ok">Apply complete.</span></div>
+            </div>
+            <div class="tiles">
+              <div class="tile"><b>Azure</b><span>AKS &middot; APIM</span></div>
+              <div class="tile"><b>AWS</b><span>EKS &middot; VPC</span></div>
+              <div class="tile"><b>GCP</b><span>GKE &middot; IAM</span></div>
+            </div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-meta"><span class="proj-cat">Platform Engineering</span><span class="proj-year">Ingram Micro</span></div>
+            <h3>Multi-Cloud Platform Engineering</h3>
+            <p>Terraform IaC frameworks, CI/CD frameworks and Kubernetes platform work used by production teams across Azure, AWS and GCP &mdash; including Azure API Management (3+ years), DevSecOps, and AI-assisted engineering workflows that productionised how teams ship.</p>
+            <div class="chips">
+              <span class="chip">Terraform</span>
+              <span class="chip">Kubernetes</span>
+              <span class="chip">GitOps</span>
+              <span class="chip">DevSecOps</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Promethus -->
+        <article class="proj">
+          <div class="proj-visual" role="img" aria-label="Illustration of a price chart on the Promethus trading research terminal">
+            <div class="v-head"><span class="v-dot"></span> Promethus &mdash; research terminal</div>
+            <div class="chartbox">
+              <svg viewBox="0 0 460 190" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <g stroke="var(--card-line)" stroke-width="1">
+                  <line x1="0" y1="38" x2="460" y2="38"/><line x1="0" y1="76" x2="460" y2="76"/>
+                  <line x1="0" y1="114" x2="460" y2="114"/><line x1="0" y1="152" x2="460" y2="152"/>
+                </g>
+                <polyline points="0,152 46,136 92,144 138,106 184,120 230,84 276,96 322,58 368,70 414,34 460,46"
+                  fill="none" stroke="var(--teal)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+                <circle cx="322" cy="58" r="5" fill="var(--teal)"/>
+                <circle cx="414" cy="34" r="5" fill="var(--teal)"/>
+              </svg>
+            </div>
+            <div class="stat-row">
+              <div class="stat"><b>Verified</b><span>vs real data</span></div>
+              <div class="stat"><b>Paper</b><span>no live money</span></div>
+              <div class="stat"><b>Logged</b><span>every claim</span></div>
+            </div>
+          </div>
+          <div class="proj-body">
+            <div class="proj-meta"><span class="proj-cat">Personal Build</span><span class="proj-year">promenthus.com</span></div>
+            <h3>Promethus Trading Desk</h3>
+            <p>A personal trading desk and research terminal with signal tracking, paper trading and verified backtesting &mdash; every claim tested against real exchange data, paper-only, no live money. Anything unproven stays labelled unproven.</p>
+            <div class="chips">
+              <span class="chip">Signal Tracking</span>
+              <span class="chip">Paper Trading</span>
+              <span class="chip">Backtest Verification</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="view-all-row">
+        <a href="https://varundusane.github.io/" target="_blank" rel="noopener noreferrer">View All Projects <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. ABOUT ============ -->
+  <section class="section" id="about" style="padding-top:20px">
+    <div class="wrap">
+      <p class="label">About</p>
+      <div class="about-grid">
+        <div>
+          <h2 class="about-name">Varun<br />Dusane</h2>
+          <p class="about-role">Lead DevOps Engineer</p>
+        </div>
+        <div class="about-cols">
+          <p class="about-statement">Building reliable platforms across Azure, AWS and GCP &mdash; with automation and AI where they genuinely help.</p>
+          <p>I&rsquo;m a <strong>Lead DevOps Engineer</strong> specialising in platform engineering and AI infrastructure. I simplify complex infrastructure, design automation that scales with intention, and build the guardrails that let teams move fast without breaking production.</p>
+          <p>Outside the day job, I build research systems with the same discipline &mdash; a multi-agent research log (ATLAS), a 3-minute scalping paper desk (SCALP-3M), and verification tooling that tests trading claims against real data before anyone trusts them.</p>
+        </div>
+      </div>
+
+      <!-- Stats strip -->
+      <div class="stats" style="margin-top:64px" role="list" aria-label="Career numbers">
+        <div class="statcell" role="listitem">
+          <span class="ic" aria-hidden="true">YRS</span>
+          <b>8<i>+</i></b>
+          <p class="cap">Years Experience</p>
+          <p class="note">DevOps &amp; platform engineering</p>
+        </div>
+        <div class="statcell" role="listitem">
+          <span class="ic" aria-hidden="true">&#9729;</span>
+          <b>3</b>
+          <p class="cap">Clouds in Production</p>
+          <p class="note">Azure &middot; AWS &middot; GCP</p>
+        </div>
+        <div class="statcell" role="listitem">
+          <span class="ic" aria-hidden="true">IaC</span>
+          <b>6<i>+</i></b>
+          <p class="cap">Years of IaC</p>
+          <p class="note">Terraform frameworks at scale</p>
+        </div>
+        <div class="statcell" role="listitem">
+          <span class="ic" aria-hidden="true">API</span>
+          <b>3<i>+</i></b>
+          <p class="cap">Years Azure APIM</p>
+          <p class="note">Azure API Management</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ How I Work ============ -->
+  <section class="section" id="how" style="padding-top:10px">
+    <div class="wrap">
+      <p class="label">How I Work</p>
+      <div class="section-head">
+        <h2>Principles I ship by</h2>
+      </div>
+      <ul class="principles">
+        <li>
+          <h3>Reliability first</h3>
+          <p>I frame platform decisions around reliability, cost and developer experience &mdash; in that order when production is on the line.</p>
+        </li>
+        <li>
+          <h3>Automate the repetitive</h3>
+          <p>Automate the repetitive so teams focus on high-value work &mdash; guardrails and audit trails included, not bolted on.</p>
+        </li>
+        <li>
+          <h3>Verify before trusting</h3>
+          <p>Verify claims against real data before trusting them &mdash; in infrastructure and in trading research alike.</p>
+        </li>
+        <li>
+          <h3>Ship together, safely</h3>
+          <p>I work closely with engineering, product and leadership to ship safely &mdash; and to keep what shipped, shipped.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 4. WHAT I DO ============ -->
+  <section class="section" id="services" style="padding-top:10px">
+    <div class="wrap">
+      <p class="label">What I Do</p>
+      <div class="services-grid">
+        <div>
+          <h2>Platform solutions tailored for your business</h2>
+          <p class="cap-count"><b>04</b> Capabilities</p>
+        </div>
+        <div class="cap-list">
+          <div class="cap-row">
+            <span class="num">01</span>
+            <div>
+              <h3>Cloud Platform Engineering</h3>
+              <p>Multi-cloud platforms across Azure, AWS and GCP that scale with the business &mdash; landing zones, networking and shared services teams can build on safely.</p>
+            </div>
+            <span class="arr" aria-hidden="true">&#8599;</span>
+          </div>
+          <div class="cap-row">
+            <span class="num">02</span>
+            <div>
+              <h3>Kubernetes, GitOps &amp; CI/CD</h3>
+              <p>Delivery pipelines and GitOps workflows on Kubernetes with safe, observable rollouts &mdash; so shipping to production becomes routine, not risky.</p>
+            </div>
+            <span class="arr" aria-hidden="true">&#8599;</span>
+          </div>
+          <div class="cap-row">
+            <span class="num">03</span>
+            <div>
+              <h3>AI Platform &amp; Automation</h3>
+              <p>AI-assisted engineering and operations automation &mdash; OpsPilot-style assistants inside Microsoft Teams, plus RAG, MCP and agent workflows wired into real systems.</p>
+            </div>
+            <span class="arr" aria-hidden="true">&#8599;</span>
+          </div>
+          <div class="cap-row">
+            <span class="num">04</span>
+            <div>
+              <h3>Infrastructure as Code &amp; DevSecOps</h3>
+              <p>Reusable Terraform frameworks built over 6 years of IaC work, with security and policy checks built into delivery instead of bolted on afterwards.</p>
+            </div>
+            <span class="arr" aria-hidden="true">&#8599;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5. TECH ARSENAL ============ -->
+  <section class="section" id="skills" style="padding-top:10px">
+    <div class="wrap">
+      <p class="label">Tech Arsenal</p>
+      <div class="section-head">
+        <h2>Skills</h2>
+      </div>
+      <div class="skills-panel">
+        <div class="skill-group">
+          <div class="skill-group-head">
+            <span class="ic" aria-hidden="true">&#9729;</span>
+            <h3>Cloud &amp; Platforms</h3>
+            <span class="count">05</span>
+          </div>
+          <ul class="skill-list">
+            <li><span class="sdot"></span>Azure</li>
+            <li><span class="sdot"></span>AWS</li>
+            <li><span class="sdot"></span>GCP</li>
+            <li><span class="sdot"></span>Kubernetes</li>
+            <li><span class="sdot"></span>Azure API Management<span class="yrs">3+ yrs</span></li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-head">
+            <span class="ic" aria-hidden="true">&#9881;</span>
+            <h3>Automation &amp; IaC</h3>
+            <span class="count">07</span>
+          </div>
+          <ul class="skill-list">
+            <li><span class="sdot"></span>Terraform<span class="yrs">6 yrs IaC</span></li>
+            <li><span class="sdot"></span>GitOps</li>
+            <li><span class="sdot"></span>CI/CD</li>
+            <li><span class="sdot"></span>Docker</li>
+            <li><span class="sdot"></span>Linux</li>
+            <li><span class="sdot"></span>PowerShell</li>
+            <li><span class="sdot"></span>Python</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-head">
+            <span class="ic" aria-hidden="true">AI</span>
+            <h3>AI &amp; Engineering Tools</h3>
+            <span class="count">05</span>
+          </div>
+          <ul class="skill-list">
+            <li><span class="sdot"></span>LLMs &amp; RAG</li>
+            <li><span class="sdot"></span>MCP</li>
+            <li><span class="sdot"></span>AI Agents</li>
+            <li><span class="sdot"></span>Git</li>
+            <li><span class="sdot"></span>Microsoft Teams Automation</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6. PROFESSIONAL EXPERIENCE ============ -->
+  <section class="section" id="experience" style="padding-top:10px">
+    <div class="wrap">
+      <p class="label">Professional Experience</p>
+      <div class="section-head">
+        <div>
+          <h2>Where I&rsquo;ve worked</h2>
+          <p class="sub">8+ years of DevOps and platform engineering, most recently leading platform work at Ingram Micro.</p>
+        </div>
+        <a class="pill-link" href="https://varundusane.github.io/" target="_blank" rel="noopener noreferrer">Full Portfolio <span aria-hidden="true">&#8599;</span></a>
+      </div>
+
+      <div class="exp-grid">
+        <article class="exp-card">
+          <div class="exp-doc">
+            <p class="co">Ingram Micro</p>
+            <h3>Lead DevOps Engineer</h3>
+            <p>Multi-cloud platform engineering across Azure, AWS and GCP &mdash; Terraform IaC frameworks, CI/CD frameworks, Kubernetes platforms, Azure API Management and AI-assisted engineering, including OpsPilot.</p>
+            <p class="seal">Current role</p>
+          </div>
+          <div class="exp-meta">
+            <p class="role-line">Lead DevOps Engineer</p>
+            <p class="where">Ingram Micro &middot; Platform &amp; AI Infrastructure</p>
+            <a href="https://varundusane.github.io/#experience" target="_blank" rel="noopener noreferrer">&#8599; See role details</a>
+          </div>
+        </article>
+
+        <article class="exp-card">
+          <div class="exp-doc">
+            <p class="co">Magmarkd</p>
+            <h3>DevOps Engineer</h3>
+            <p>An earlier chapter in the 8+ years of DevOps work behind the current platform specialisation &mdash; part of the path from hands-on infrastructure to leading platform engineering.</p>
+            <p class="seal">Earlier role</p>
+          </div>
+          <div class="exp-meta">
+            <p class="role-line">DevOps Engineer</p>
+            <p class="where">Magmarkd &middot; Earlier role</p>
+            <a href="https://varundusane.github.io/#experience" target="_blank" rel="noopener noreferrer">&#8599; See role details</a>
+          </div>
+        </article>
+
+        <article class="exp-card">
+          <div class="exp-doc">
+            <p class="co">TechnoInnovation</p>
+            <h3>DevOps Engineer</h3>
+            <p>Where the DevOps career started &mdash; the foundation years of automation, delivery and infrastructure work that the later platform roles are built on.</p>
+            <p class="seal">Earlier role</p>
+          </div>
+          <div class="exp-meta">
+            <p class="role-line">DevOps Engineer</p>
+            <p class="where">TechnoInnovation &middot; Earlier role</p>
+            <a href="https://varundusane.github.io/#experience" target="_blank" rel="noopener noreferrer">&#8599; See role details</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7. CHAT WITH ME ============ -->
+  <section class="section" id="contact" style="padding-top:10px">
+    <div class="wrap">
+      <p class="label">Chat With Me</p>
+      <div class="contact-grid">
+        <div>
+          <h2>Let&rsquo;s build something reliable</h2>
+          <p class="contact-lede">Share what you&rsquo;re working on and I&rsquo;ll get back to you within a day. Prefer chat? Reach me directly on LinkedIn.</p>
+          <div class="avail-card">
+            <p class="a-label"><b>01</b> &middot; Live availability</p>
+            <p class="a-status"><span class="dot" aria-hidden="true"></span> Open to new roles</p>
+            <p>Fully remote from India first choice &mdash; or hybrid in Mumbai / Bengaluru.</p>
+          </div>
+          <p class="channels-label"><b>02</b> &middot; Direct channels</p>
+          <a class="channel" href="mailto:vdusane6@gmail.com"><span class="n">01</span> Email <span class="arr" aria-hidden="true">&#8599;</span></a>
+          <a class="channel" href="https://www.linkedin.com/in/varun-d-b2a13282/" target="_blank" rel="noopener noreferrer"><span class="n">02</span> LinkedIn <span class="arr" aria-hidden="true">&#8599;</span></a>
+          <a class="channel" href="https://github.com/varundusane" target="_blank" rel="noopener noreferrer"><span class="n">03</span> GitHub <span class="arr" aria-hidden="true">&#8599;</span></a>
+        </div>
+        <div class="contact-card">
+          <p class="cc-label"><b>01</b> &middot; Start a conversation</p>
+          <h3>Tell me about the role or the problem</h3>
+          <p>No forms that go nowhere &mdash; these buttons reach me directly. Email opens in your own mail app, addressed and ready to write.</p>
+          <div class="cc-actions">
+            <a class="cc-btn primary" href="mailto:vdusane6@gmail.com?subject=Hello%20Varun%20%E2%80%94%20from%20your%20portfolio">Email me <span aria-hidden="true">&rarr;</span></a>
+            <a class="cc-btn ghost" href="https://www.linkedin.com/in/varun-d-b2a13282/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn <span class="arr" aria-hidden="true">&#8599;</span></a>
+            <a class="cc-btn ghost" href="https://github.com/varundusane" target="_blank" rel="noopener noreferrer">See my GitHub <span class="arr" aria-hidden="true">&#8599;</span></a>
+            <a class="cc-btn ghost" href="assets/Varun_Dusane_CV.pdf" download="Varun_Dusane_CV.pdf">Download my CV (PDF) <span class="arr" aria-hidden="true">&darr;</span></a>
+          </div>
+          <p class="cc-note">Replies within one business day.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-in">
+    <span class="fname">Varun Dusane</span>
+    <p class="fcopy">&copy; 2026 Varun Dusane &middot; Lead DevOps Engineer &middot; Pune, India</p>
+    <a class="to-top" href="#top">Back to top <span aria-hidden="true">&uarr;</span></a>
+  </div>
+</footer>
+
+</body>
+</html>
