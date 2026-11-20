@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="TradePrime — an Android trading app with the AI built into the app itself. On-device Qwen3 LLM via llama.rn, deterministic analysis engine, voice market agent and Telegram paper signals. Personal project, paper only.">
+<link rel="icon" href="data:,">
+<title>TradePrime — Local AI Showcase</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a141f; --bg-soft:#081019; --panel:#0e1e2b; --card:#12242f; --card-2:#0d1b27; --chip:#162c3a;
+  --line:#223644; --line-2:#2e4a5e; --ink:#eef4f2; --ink-soft:#bfcfd6; --muted:#8fa3ad; --dim:#6e8593;
+  --teal:#45cfc0; --teal-bright:#2dd4bf; --teal-deep:#0e7a74; --teal-soft:#123231;
+  --ok:#3ecf8e; --warn:#f5c86b; --bad:#ff8a7a; --light:#e8f1ef;
+  --nav-bg:rgba(13,26,36,.92); --shadow:0 24px 60px rgba(0,0,0,.45); --shadow-sm:0 10px 30px rgba(0,0,0,.35);
+  --radius:18px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--teal)}
+button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:44px}
+:focus-visible{outline:2px solid var(--teal);outline-offset:3px;border-radius:6px}
+.mono{font-family:"IBM Plex Mono",monospace}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+section[id],footer[id]{scroll-margin-top:132px}
+.label{display:flex;align-items:center;gap:14px;font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--teal);margin:0 0 22px}
+.label::before{content:"";width:34px;height:2px;background:var(--teal);flex:none}
+
+/* Nav */
+.nav-float{position:sticky;top:14px;z-index:50;padding:0 16px}
+.nav-pill{max-width:1180px;margin:0 auto;background:var(--nav-bg);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:999px;box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:8px;padding:8px 10px 8px 12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;margin-right:auto;min-height:44px;color:var(--ink)}
+.brand-mark{width:42px;height:42px;border-radius:12px;flex:none;border:1.5px solid var(--teal);color:var(--teal);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:19px;background:var(--card)}
+.brand b{display:block;font-size:15.5px;line-height:1.15;letter-spacing:-.01em}
+.brand .brand-role{display:block;font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.nav-links{display:flex;gap:0;flex-wrap:nowrap}
+.nav-links a{text-decoration:none;font-size:13px;font-weight:500;color:var(--ink-soft);padding:9px 8px;min-height:44px;display:inline-flex;align-items:center;border-radius:999px;white-space:nowrap}
+.nav-links a:hover{color:var(--ink)}
+.back-pill{border:1.5px solid var(--line-2);color:var(--ink);text-decoration:none;font-size:13.5px;font-weight:600;padding:10px 16px;min-height:44px;display:inline-flex;align-items:center;gap:7px;border-radius:999px;white-space:nowrap}
+.back-pill:hover{border-color:var(--teal);color:var(--teal)}
+.nav-cta{background:var(--light);color:#0d1821;text-decoration:none;font-size:13.5px;font-weight:600;padding:11px 18px;min-height:44px;display:inline-flex;align-items:center;gap:8px;border-radius:999px;white-space:nowrap}
+.nav-cta:hover{opacity:.88;color:#0d1821}
+.menu-btn{display:none}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:48px;padding:11px 24px;border-radius:999px;text-decoration:none;cursor:pointer;font-size:15px;font-weight:600;font-family:inherit;border:1.5px solid transparent}
+.btn-solid{background:var(--teal-bright);color:#08201e}
+.btn-solid:hover{background:var(--teal)}
+.btn-outline{border-color:var(--line-2);background:var(--card);color:var(--ink)}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+.btn-sm{min-height:44px;padding:9px 18px;font-size:13.5px}
+
+/* Hero */
+.hero{padding:38px 0 26px;position:relative}
+.avail{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:14px;color:var(--ink-soft);margin:0 0 24px}
+.avail .dot{width:9px;height:9px;border-radius:50%;background:var(--ok);flex:none;box-shadow:0 0 0 4px rgba(62,207,142,.18)}
+.avail .sep{color:var(--muted)}
+.avail .caps{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase}
+h1{font-size:clamp(40px,6.2vw,74px);line-height:1.0;font-weight:700;letter-spacing:-.03em;margin:0 0 20px;max-width:13em}
+h1 .accent{color:var(--teal)}
+.hero-sub{font-size:clamp(17px,2.4vw,22px);color:var(--ink);max-width:840px;margin:0 0 8px;font-weight:600;letter-spacing:-.01em}
+.hero-sub2{color:var(--ink-soft);max-width:800px;margin:0;font-size:16px;line-height:1.65}
+.hero-sub2 strong{color:var(--ink)}
+.pillrow{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0 0}
+.pill{font-family:"IBM Plex Mono",monospace;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:8px 13px;min-height:34px;display:inline-flex;align-items:center;gap:6px;border-radius:999px;border:1px solid var(--line);background:var(--chip);color:var(--muted)}
+.pill b{color:var(--teal)} .pill.g b{color:var(--ok)}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin:30px 0 0}
+.spec-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:26px 0 0}
+@media(max-width:860px){.spec-strip{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.spec-strip{grid-template-columns:1fr}}
+.spec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.spec small{color:var(--muted);text-transform:uppercase;letter-spacing:.14em;font-size:11px;font-weight:600;font-family:"IBM Plex Mono",monospace}
+.spec div{font-weight:600;margin-top:4px;font-size:15.5px}
+
+/* Flow strip */
+.flow-panel{margin:30px 0 0;position:relative;background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow-sm);padding:26px 22px 22px}
+.float-chip{position:absolute;display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-sm);padding:10px 14px;font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--teal)}
+.float-chip.tl{top:-16px;left:22px}
+.float-chip.br{bottom:-14px;right:22px;color:var(--ok)}
+.flowrow{display:flex;align-items:stretch;gap:0}
+.fnode{min-width:0;flex:1 1 0;background:var(--card-2);border:1px solid var(--line-2);border-radius:15px;padding:16px 8px;text-align:center}
+.fnode .ic{font-size:24px}
+.fnode b{display:block;font-size:13px;margin-top:6px;line-height:1.3}
+.fnode small{color:var(--dim);font-size:11.5px;line-height:1.45;display:block;margin-top:3px}
+.farrow{display:grid;place-items:center;color:var(--teal);font-size:16px;padding:0 3px;flex:0 0 auto;font-weight:700}
+@media(max-width:700px){.flowrow{flex-wrap:wrap;row-gap:10px}.fnode{flex:1 1 42%}.farrow{display:none}}
+
+/* Sections */
+section{padding:64px 0 10px}
+.sec-head{margin-bottom:26px}
+.sec-head h2{font-size:clamp(30px,4.4vw,50px);line-height:1.08;font-weight:700;letter-spacing:-.028em;margin:0 0 12px;max-width:17em}
+.sec-head h2 .accent{color:var(--teal)} .sec-head h2 .accent-g{color:var(--ok)}
+.sec-head p{color:var(--ink-soft);max-width:800px;margin:0;font-size:16px;line-height:1.65}
+.sec-head p strong{color:var(--ink)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm)}
+.card h3{margin-top:0;font-size:19px;letter-spacing:-.01em}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:860px){.g2,.g3{grid-template-columns:1fr}}
+.mini{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:18px;box-shadow:var(--shadow-sm)}
+.mini .ic{font-size:25px}
+.mini b{display:block;margin:8px 0 4px;font-size:15.5px}
+.mini p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.6}
+.mini code{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--teal);word-break:break-all}
+.check{width:22px;height:22px;flex:0 0 22px;border-radius:50%;background:var(--ok);color:#04140a;display:grid;place-items:center;font-weight:700;font-size:13px;margin-top:1px}
+.checklist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.checklist li{display:flex;gap:10px;font-size:14.5px;color:var(--ink-soft);align-items:flex-start}
+.checklist li b{color:var(--ink)}
+.hflow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0}
+.hflow .hn{background:var(--card-2);border:1px solid var(--line-2);border-radius:11px;padding:9px 12px;font-weight:600;font-size:13px}
+.hflow .ha{color:var(--teal);font-weight:700}
+.intent-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+.chip-s{font-size:12.5px;font-weight:600;background:var(--teal-soft);border:1px solid #1d4a47;color:#a7e8df;border-radius:999px;padding:6px 11px;min-height:32px;display:inline-flex;align-items:center}
+.chip-s.blue{background:var(--chip);border-color:var(--line-2);color:#9fc6d8;font-family:"IBM Plex Mono",monospace;font-size:12px}
+.alert-box{margin-top:16px;background:var(--teal-soft);border:1px solid #1d4a47;border-radius:13px;padding:14px 16px;font-size:14.5px;color:var(--ink-soft)}
+.alert-box b{color:var(--ink)}
+.warn-box{margin-top:16px;background:#2b2410;border:1px solid #5c4a1d;border-radius:13px;padding:14px 16px;font-size:14.5px;color:#e8dcc0}
+.warn-box b{color:#fff}
+pre{background:var(--bg-soft);border:1px solid var(--line);border-radius:13px;padding:15px;overflow-x:auto;font-family:"IBM Plex Mono",monospace;font-size:12.5px;line-height:1.65;color:#c9e7ff;margin:0;white-space:pre-wrap;word-break:break-word}
+
+/* Principle */
+.principle{background:linear-gradient(135deg,var(--teal-soft),var(--card));border:1px solid #1d4a47;border-radius:20px;padding:30px 28px;box-shadow:var(--shadow-sm)}
+.principle .q{font-size:clamp(20px,3vw,27px);line-height:1.4;font-weight:600;letter-spacing:-.015em;margin:0 0 12px}
+.principle .q em{color:var(--teal);font-style:normal}
+.principle p{color:var(--ink-soft);margin:0;font-size:15px;max-width:56em}
+
+/* Toggle */
+.toggle{display:flex;background:var(--card-2);border:1px solid var(--line-2);border-radius:999px;padding:5px;gap:5px;max-width:640px}
+.toggle button{flex:1;border:0;border-radius:999px;background:transparent;color:var(--muted);font-weight:600;cursor:pointer;padding:10px 10px;font-size:13.5px;font-family:inherit;min-height:46px}
+.toggle button.on-teal{background:var(--teal-bright);color:#08201e}
+.toggle button.on-light{background:var(--light);color:#0d1821}
+.toggle button.on-green{background:var(--ok);color:#04140a}
+
+/* Model cards */
+.model-card{position:relative}
+.model-card .size{font-size:40px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.model-card .size i{font-style:normal;color:var(--teal);font-size:20px}
+.model-badge{position:absolute;top:18px;right:18px;font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border-radius:999px;border:1px solid var(--line-2);background:var(--chip);color:var(--teal)}
+.engine-state{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--card-2);border:1px solid var(--line);border-radius:13px;padding:14px 16px;margin-top:16px}
+.engine-dot{width:11px;height:11px;border-radius:50%;background:var(--warn);flex:none}
+.engine-dot.qwen{background:var(--ok);box-shadow:0 0 0 4px rgba(62,207,142,.18)}
+
+/* Analysis demo */
+.phone{background:var(--card-2);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow-sm)}
+.phone-bar{background:var(--panel);padding:13px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)}
+.phone-bar .plogo{width:30px;height:30px;border-radius:9px;background:var(--teal-deep);color:#fff;display:grid;place-items:center;font-weight:700}
+.phone-body{padding:18px}
+.sample-tag{display:inline-flex;align-items:center;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--warn);border:1px solid #5c4a1d;background:#2b2410;border-radius:999px;padding:5px 11px;min-height:28px}
+.bias-row{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:14px 0 4px}
+.bias-big{font-size:34px;font-weight:700;letter-spacing:-.02em;line-height:1}
+.bias-big.bull{color:var(--ok)} .bias-big.side{color:var(--warn)} .bias-big.bear{color:var(--bad)}
+.conf{text-align:right}
+.conf b{display:block;font-size:26px;line-height:1}
+.conf span{font-size:11.5px;color:var(--muted);font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.1em}
+.confbar{height:8px;border-radius:99px;background:var(--chip);overflow:hidden;margin:10px 0 16px}
+.confbar i{display:block;height:100%;background:var(--teal-bright);border-radius:99px;transition:width .4s ease}
+.ind-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:560px){.ind-grid{grid-template-columns:1fr 1fr}}
+.ind{background:var(--chip);border:1px solid var(--line);border-radius:11px;padding:10px 12px}
+.ind span{display:block;font-size:10.5px;color:var(--muted);font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.06em}
+.ind b{font-size:15px}
+.levels{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+@media(max-width:560px){.levels{grid-template-columns:1fr 1fr}}
+.level{border-radius:11px;padding:11px 12px;border:1px solid var(--line)}
+.level span{display:block;font-size:10.5px;font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.level b{font-size:15.5px}
+.level.entry{background:var(--teal-soft);border-color:#1d4a47}
+.level.sl{background:#2b1712;border-color:#5c2d1d}
+.level.tgt{background:#10281a;border-color:#1d5c3a}
+.note-list{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:7px}
+.note-list li{font-size:13.5px;color:var(--ink-soft);display:flex;gap:9px}
+.note-list li::before{content:"—";color:var(--teal);flex:none}
+
+/* Voice agent */
+.voice-log{background:var(--bg-soft);border:1px solid var(--line);border-radius:13px;padding:14px 16px;min-height:150px;display:flex;flex-direction:column;gap:9px}
+.voice-log .vline{font-size:13.5px;color:var(--ink-soft);display:flex;gap:10px;align-items:flex-start}
+.voice-log .vline .vt{font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--dim);flex:none;padding-top:2px}
+.voice-log .vline.spoken{color:var(--ink)}
+.voice-log .vline.spoken::before{content:"🔊";flex:none}
+.det-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:560px){.det-grid{grid-template-columns:1fr}}
+.det{display:flex;align-items:center;gap:11px;background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:11px 13px;font-size:13.5px;cursor:pointer;min-height:48px;width:100%;text-align:left;color:var(--ink);font-family:inherit}
+.det .sw{width:38px;height:22px;flex:0 0 38px;border-radius:99px;background:var(--chip);border:1px solid var(--line-2);position:relative}
+.det .sw::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--muted);transition:left .2s,background .2s}
+.det.on .sw{background:var(--teal-soft);border-color:var(--teal)}
+.det.on .sw::after{left:18px;background:var(--teal-bright)}
+.det.off{opacity:.55}
+.voice-status{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600}
+.voice-status .vd{width:10px;height:10px;border-radius:50%;background:var(--dim);flex:none}
+.voice-status.live .vd{background:var(--ok);box-shadow:0 0 0 4px rgba(62,207,142,.18);animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+
+/* Telegram */
+.tg-input{width:100%;background:var(--bg-soft);border:1px solid var(--line-2);border-radius:13px;color:var(--ink);font-family:"IBM Plex Mono",monospace;font-size:13.5px;line-height:1.6;padding:14px;min-height:130px;resize:vertical}
+.tg-input:focus{outline:2px solid var(--teal);outline-offset:2px}
+.order-card{background:var(--card-2);border:1px solid #1d5c3a;border-radius:15px;padding:18px}
+.order-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.order-grid div{background:var(--chip);border:1px solid var(--line);border-radius:11px;padding:10px 12px}
+.order-grid span{display:block;font-size:10.5px;color:var(--muted);font-family:"IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.06em}
+.order-grid b{font-size:15px}
+.paper-tag{display:inline-flex;font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.12em;padding:6px 12px;border-radius:999px;background:var(--ok);color:#04140a;min-height:28px;align-items:center}
+
+/* Stack */
+.skills-panel{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line);border-radius:20px;background:var(--card);overflow:hidden;box-shadow:var(--shadow-sm)}
+.skill-group{padding:26px 26px 28px;border-left:1px solid var(--line)}
+.skill-group:first-child{border-left:0}
+.skill-group-head{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.skill-group-head .ic{width:40px;height:40px;border-radius:11px;background:var(--teal-soft);color:var(--teal);display:flex;align-items:center;justify-content:center;flex:none;font-family:"IBM Plex Mono",monospace;font-weight:700;font-size:13px}
+.skill-group-head h3{font-size:16.5px;font-weight:600;margin:0}
+.skill-group-head .count{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:14px;color:var(--muted)}
+.skill-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.skill-list li{display:flex;align-items:center;gap:11px;font-size:14.5px;padding:7px 2px;min-height:38px}
+.skill-list .sdot{width:7px;height:7px;border-radius:2px;background:var(--teal);flex:none;opacity:.75}
+.skill-list .tag{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--teal);white-space:nowrap}
+@media(max-width:860px){.skills-panel{grid-template-columns:1fr}.skill-group{border-left:0;border-top:1px solid var(--line)}.skill-group:first-child{border-top:0}}
+
+/* Honest strip + footer */
+.honest{margin-top:56px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:16px;padding:22px 24px;box-shadow:var(--shadow-sm)}
+.honest h3{margin:0 0 8px;font-size:16px}
+.honest p{margin:0;color:var(--ink-soft);font-size:14.5px;max-width:62em}
+footer{border-top:1px solid var(--line);padding:44px 0 52px;background:var(--bg-soft);margin-top:64px}
+.foot-brand{font-size:17px;font-weight:700;letter-spacing:-.01em;margin-bottom:8px}
+.foot-brand span{color:var(--teal)}
+footer p{color:var(--muted);font-size:14px;line-height:1.65;margin:0 0 18px;max-width:760px}
+.foot-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+
+@media(max-width:860px){
+  .wrap{padding:0 20px}
+  section[id],footer[id]{scroll-margin-top:104px}
+  .nav-pill{border-radius:999px;flex-wrap:wrap}
+  .brand{margin-right:0}
+  .brand-mark{width:36px;height:36px;font-size:16px}
+  .brand b{font-size:14px}
+  .brand .brand-role{display:none}
+  .nav-pill .back-pill{margin-left:auto;font-size:11.5px;padding:8px 10px;min-height:40px}
+  .menu-btn{display:inline-flex;align-items:center;gap:5px;min-height:40px;background:var(--card);border:1.5px solid var(--line-2);color:var(--ink);border-radius:999px;padding:8px 11px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+  .nav-links{display:none;order:3;width:100%;flex-wrap:wrap;padding:4px 2px 2px}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:8px 9px;min-height:40px}
+  .hero{padding:26px 0 10px}
+  section{padding:52px 0 8px}
+  .btn{flex:1 1 auto}
+  .toggle{max-width:none}
+  .float-chip.tl{left:10px}
+  .float-chip.br{right:10px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body id="top">
+
+<!-- Floating pill nav -->
+<div class="nav-float">
+  <div class="nav-pill">
+    <a class="brand" href="#top" aria-label="TradePrime — Local AI Showcase, home">
+      <span class="brand-mark" aria-hidden="true">T</span>
+      <span><b>TradePrime</b><span class="brand-role">Local AI · Android</span></span>
+    </a>
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks">Menu <span aria-hidden="true">▾</span></button>
+    <nav class="nav-links" id="navLinks" aria-label="Main">
+      <a href="#llm">Local LLM</a>
+      <a href="#engine">Engine Demo</a>
+      <a href="#voice">Voice Agent</a>
+      <a href="#telegram">Telegram</a>
+      <a href="#more">More Features</a>
+      <a href="#stack">Stack</a>
+    </nav>
+    <a class="back-pill nav-cta" href="../">&larr; Back to Portfolio</a>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- ============ HERO ============ -->
+  <div class="hero">
+    <p class="avail">
+      <span class="dot" aria-hidden="true"></span>
+      <span>Personal project · Android app</span>
+      <span class="sep" aria-hidden="true">&mdash;</span>
+      <span class="caps">TradePrime v1.3.3 / Expo · React Native</span>
+    </p>
+    <h1>The AI lives <span class="accent">inside the app</span> — not in the cloud.</h1>
+    <p class="hero-sub">TradePrime is an Android trading app with a large language model built into the app itself.</p>
+    <p class="hero-sub2">A <strong>Qwen3 model is downloaded to the phone and runs on-device</strong> via llama.rn — no cloud AI is needed for the analysis. Underneath it, a deterministic engine does the actual market maths on live data, a voice agent watches BTC and NIFTY and speaks what it sees, and Telegram signals become local paper orders. <strong>Analysis and paper features only — no live-money trading.</strong></p>
+
+    <div class="pillrow">
+      <span class="pill">On-device <b>Qwen3 LLM</b></span>
+      <span class="pill g">No cloud <b>AI needed</b></span>
+      <span class="pill">Voice <b>Market Agent</b></span>
+      <span class="pill g">Paper <b>only</b></span>
+    </div>
+
+    <div class="flow-panel" role="img" aria-label="Flow diagram: live market feed goes into a deterministic engine, then to the local Qwen companion, then out to the app interface and voice alerts">
+      <span class="float-chip tl">llama.rn · on-device</span>
+      <span class="float-chip br">✓ No cloud AI in the loop</span>
+      <div class="flowrow">
+        <div class="fnode"><div class="ic" aria-hidden="true">📈</div><b>Live Market Feed</b><small>BTCUSDT candles + ticker from Binance · NIFTY support</small></div>
+        <div class="farrow" aria-hidden="true">→</div>
+        <div class="fnode"><div class="ic" aria-hidden="true">⚙️</div><b>Deterministic Engine</b><small>EMA · RSI · ATR · VWAP · levels — the source of truth</small></div>
+        <div class="farrow" aria-hidden="true">→</div>
+        <div class="fnode"><div class="ic" aria-hidden="true">🧠</div><b>Local Qwen Companion</b><small>Qwen3 GGUF on the phone explains the analysis</small></div>
+        <div class="farrow" aria-hidden="true">→</div>
+        <div class="fnode"><div class="ic" aria-hidden="true">📱</div><b>App UI + Voice</b><small>Analysis screen, spoken alerts, paper orders</small></div>
+      </div>
+    </div>
+
+    <div class="hero-cta">
+      <a class="btn btn-solid" href="#engine">See the Analysis Demo <span aria-hidden="true">&rarr;</span></a>
+      <a class="btn btn-outline" href="#llm">How the Local LLM Works <span aria-hidden="true">&darr;</span></a>
+      <a class="btn btn-outline" href="../">&larr; Back to Portfolio</a>
+    </div>
+
+    <div class="spec-strip">
+      <div class="spec"><small>App</small><div>Android · Expo / React Native</div></div>
+      <div class="spec"><small>Local models</small><div>Qwen3 0.6B · Qwen3 1.7B GGUF</div></div>
+      <div class="spec"><small>Runtime</small><div>llama.rn · New Architecture</div></div>
+      <div class="spec"><small>Version</small><div>TradePrime 1.3.3</div></div>
+    </div>
+  </div>
+
+  <!-- ============ DESIGN PRINCIPLE ============ -->
+  <section id="principle" style="padding-top:44px">
+    <p class="label">Design Principle</p>
+    <div class="principle">
+      <p class="q">“The LLM is <em>not the source of truth</em> for price conditions. Price checks are rule-based — so candle closes, level breaks and retests are <em>repeatable and fast</em>. The LLM explains.”</p>
+      <p>That split runs through the whole app. The deterministic engine computes every number — trend, levels, stop, targets. The on-device Qwen model only turns that finished analysis into a readable companion explanation, and if the model is missing, the analysis still comes back complete. The AI narrates; it never invents prices.</p>
+    </div>
+  </section>
+
+  <!-- ============ 1. LOCAL LLM ============ -->
+  <section id="llm">
+    <p class="label">Feature 01 · Inbuilt On-Device LLM</p>
+    <div class="sec-head">
+      <h2>Local TradePrime AI: <span class="accent">a model on the phone itself</span></h2>
+      <p>In <strong>Available Strategies</strong>, the original strategy is now <strong>Cloud TradePrime AI</strong> — and next to it sits <strong>Local TradePrime AI</strong>, a dedicated screen that fetches live BTC data, runs the deterministic engine, and then asks the on-device Qwen model to explain it. The GGUF model files are <strong>intentionally not committed to git</strong> — they are downloaded inside the app to the phone's own document storage.</p>
+    </div>
+
+    <div class="g2">
+      <div class="card model-card">
+        <span class="model-badge">Fast profile</span>
+        <p class="mono" style="color:var(--teal);font-size:12.5px;margin:0 0 8px">Qwen3-0.6B-Q4_K_M.gguf</p>
+        <p class="size">~397 <i>MB</i></p>
+        <h3 style="margin:10px 0 6px">Qwen3 0.6B · Q4_K_M</h3>
+        <p style="color:var(--muted);font-size:14.5px;margin:0">The default on-device model (source: unsloth/Qwen3-0.6B-GGUF on Hugging Face). Small enough for everyday phones, downloaded from the Local TradePrime AI screen, and run locally through <span class="mono" style="color:var(--teal)">llama.rn</span>.</p>
+      </div>
+      <div class="card model-card">
+        <span class="model-badge">High Accuracy profile</span>
+        <p class="mono" style="color:var(--teal);font-size:12.5px;margin:0 0 8px">Qwen3-1.7B-Q4_K_M.gguf</p>
+        <p class="size">~1.1 <i>GB</i></p>
+        <h3 style="margin:10px 0 6px">Qwen3 1.7B · Q4_K_M</h3>
+        <p style="color:var(--muted);font-size:14.5px;margin:0">A larger profile for higher-quality explanations, aimed at flagship-class devices such as the OnePlus 13. Same deal: downloaded in-app, stored on the phone, run locally — nothing is sent to a cloud LLM.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px">
+      <h3>Try it: what happens with and without the model?</h3>
+      <p style="color:var(--muted);font-size:14.5px;margin-top:0">This mirrors the real app's behaviour. The analysis always exists — the toggle only changes who writes the explanation.</p>
+      <div class="toggle" role="tablist" aria-label="Engine state">
+        <button id="tabFallback" class="on-light">MODEL NOT INSTALLED — FALLBACK</button>
+        <button id="tabQwen">MODEL INSTALLED — QWEN3</button>
+      </div>
+      <div class="engine-state" role="status" aria-live="polite">
+        <span class="engine-dot" id="engineDot" aria-hidden="true"></span>
+        <div>
+          <b id="engineLabel">Engine: Fallback</b>
+          <div id="engineText" style="color:var(--muted);font-size:14px">Deterministic BTC analysis is returned in full — bias, levels, stop and targets. The companion note is the engine's own templated summary, because no local model is present.</div>
+        </div>
+      </div>
+      <ul class="checklist" style="margin-top:16px">
+        <li><span class="check">✓</span><span><b>Native runtime:</b> llama.rn on React Native New Architecture (<span class="mono" style="color:var(--teal)">newArchEnabled: true</span>); llama.rn is allowlisted to run its postinstall so it can fetch its native Android/iOS artifacts.</span></li>
+        <li><span class="check">✓</span><span><b>Failure-safe:</b> if the model isn't installed or the native runtime fails, the app still returns the deterministic analysis — the engine label simply reads <b>Fallback</b> instead of the Qwen model name.</span></li>
+        <li><span class="check">✓</span><span><b>Device test path:</b> build a custom Android app (not Expo Go) → Available Strategies → Local TradePrime AI → Install Qwen3 → Analyze BTC Live → engine switches Fallback → Qwen3.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ 2. ENGINE + DEMO ============ -->
+  <section id="engine">
+    <p class="label">Feature 02 · Deterministic Analysis Engine</p>
+    <div class="sec-head">
+      <h2>The engine does the maths. <span class="accent-g">The LLM does the talking.</span></h2>
+      <p>The engine pulls <strong>live BTCUSDT candles and ticker data from Binance</strong> (NIFTY local AI support is also in the app) and computes everything itself: <strong>EMA 9/20/50/200, RSI14, ATR14 (+ATR%), VWAP, nearby and major support/resistance, 5m/15m/60m change and volume ratio</strong>. Out comes a full trade plan — bias with confidence, market regime, a recommendation (hold long / hold short / wait / trail stop / reduce risk), entry zone, stop loss, targets T1/T2/T3, risk:reward, invalidation, reasons, risk notes and a checklist.</p>
+    </div>
+
+    <div class="g2" style="align-items:start">
+      <div class="phone">
+        <div class="phone-bar"><span class="plogo">T</span><div><b style="font-size:14px">Local TradePrime AI</b><div style="font-size:12px;color:var(--muted)">Analysis panel — layout demo</div></div><span style="margin-left:auto;color:var(--warn);font-size:12px;font-weight:700">◆ PANEL DEMO</span></div>
+        <div class="phone-body">
+          <span class="sample-tag">◆ Sample values — demo of the panel, not live data</span>
+          <div class="toggle" style="margin-top:14px;max-width:none" role="tablist" aria-label="Sample scenario">
+            <button id="scBtc" class="on-teal">BTC · BULLISH</button>
+            <button id="scSide">BTC · SIDEWAYS</button>
+            <button id="scNifty">NIFTY</button>
+          </div>
+          <div class="bias-row">
+            <div>
+              <div style="font-size:12px;color:var(--muted)" class="mono" id="anSymbol">BTCUSDT · SAMPLE</div>
+              <div class="bias-big bull" id="anBias">Bullish</div>
+              <div style="font-size:13.5px;color:var(--ink-soft)" id="anRegime">Regime: Trend up · Rec: Hold long</div>
+            </div>
+            <div class="conf"><b id="anConf">72%</b><span>Confidence</span></div>
+          </div>
+          <div class="confbar" aria-hidden="true"><i id="anConfBar" style="width:72%"></i></div>
+          <div class="ind-grid" id="anInds"></div>
+          <div class="levels">
+            <div class="level entry"><span>Entry zone</span><b id="anEntry">—</b></div>
+            <div class="level sl"><span>Stop loss</span><b id="anSl">—</b></div>
+            <div class="level tgt"><span>Targets T1/T2/T3</span><b id="anTgts">—</b></div>
+            <div class="level"><span>Risk : Reward</span><b id="anRr">—</b></div>
+          </div>
+          <ul class="note-list" id="anNotes"></ul>
+        </div>
+      </div>
+
+      <div>
+        <div class="card" style="margin-bottom:14px">
+          <h3>What the engine outputs, every time</h3>
+          <div class="intent-chips" style="margin-top:4px">
+            <span class="chip-s">Bias + confidence</span><span class="chip-s">Market regime</span><span class="chip-s">Recommendation</span>
+            <span class="chip-s">Entry zone</span><span class="chip-s">Stop loss</span><span class="chip-s">Targets T1 / T2 / T3</span>
+            <span class="chip-s">Risk : reward</span><span class="chip-s">Invalidation</span><span class="chip-s">Reasons</span>
+            <span class="chip-s">Risk notes</span><span class="chip-s">Checklist</span>
+          </div>
+          <p style="color:var(--muted);font-size:14.5px;margin-bottom:0">Every field is computed from candle data by fixed rules — the same input always produces the same plan. Only after this exists does the local Qwen model write its short companion explanation on top of it.</p>
+        </div>
+        <div class="card">
+          <h3>Indicators under the hood</h3>
+          <ul class="checklist">
+            <li><span class="check">✓</span><span><b>Trend:</b> EMA 9 / 20 / 50 / 200 stack + VWAP position</span></li>
+            <li><span class="check">✓</span><span><b>Momentum:</b> RSI14, plus 5m / 15m / 60m percentage change</span></li>
+            <li><span class="check">✓</span><span><b>Volatility &amp; size:</b> ATR14 and ATR% drive the stop and targets</span></li>
+            <li><span class="check">✓</span><span><b>Levels:</b> nearby and major support / resistance from recent structure</span></li>
+            <li><span class="check">✓</span><span><b>Participation:</b> volume ratio against recent average</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. VOICE AGENT ============ -->
+  <section id="voice">
+    <p class="label">Feature 03 · Voice Market Agent</p>
+    <div class="sec-head">
+      <h2>It watches the market — <span class="accent">and speaks up</span></h2>
+      <p>While the Local TradePrime AI screen is open, the Voice Market Agent scans <strong>BTC and NIFTY every 12 seconds</strong> (with a keep-awake lock on the screen). A deterministic watcher — 1m candles aggregated into 15m — detects events and reads them aloud through <strong>Android text-to-speech</strong>. You can also <strong>push-to-talk</strong>: ask a question out loud, and it is answered from the latest market snapshot by local Qwen, with a deterministic spoken answer as fallback.</p>
+    </div>
+
+    <div class="g2" style="align-items:start">
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <div class="voice-status" id="voiceStatus"><span class="vd" aria-hidden="true"></span><span id="voiceStatusText">Voice agent stopped</span></div>
+          <span class="mono" style="font-size:12px;color:var(--muted)">SCAN · EVERY 12s</span>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin:16px 0">
+          <button class="btn btn-solid btn-sm" id="voiceToggle">▶ Start Voice Agent</button>
+          <button class="btn btn-outline btn-sm" id="voiceSpeak">🔊 Speak Current Summary</button>
+        </div>
+        <p class="mono" style="font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 8px">Last spoken alerts — demo log</p>
+        <div class="voice-log" id="voiceLog" aria-live="polite">
+          <div class="vline"><span class="vt">—</span><span>Press <b>Start Voice Agent</b> to watch the demo watcher detect events and “speak” them here, in order.</span></div>
+        </div>
+        <div class="alert-box"><b>Push-to-talk:</b> spoken questions (via speech recognition) are routed into the latest BTC/NIFTY snapshot and watcher state — local Qwen answers when installed, the deterministic market answer otherwise.</div>
+      </div>
+
+      <div class="card">
+        <h3>Toggleable detectors</h3>
+        <p style="color:var(--muted);font-size:14px;margin-top:0">Tap to switch detectors on or off — exactly like the panel in the app. The demo watcher only “speaks” events whose detector is on.</p>
+        <div class="det-grid" id="detGrid">
+          <button class="det on" data-det="break"><span class="sw" aria-hidden="true"></span>1m support / resistance breaks</button>
+          <button class="det on" data-det="retest"><span class="sw" aria-hidden="true"></span>15m retests</button>
+          <button class="det on" data-det="ob"><span class="sw" aria-hidden="true"></span>Order-block retests</button>
+          <button class="det on" data-det="vwap"><span class="sw" aria-hidden="true"></span>VWAP reclaim / loss</button>
+          <button class="det on" data-det="ema"><span class="sw" aria-hidden="true"></span>EMA20 reclaim / loss</button>
+          <button class="det on" data-det="vol"><span class="sw" aria-hidden="true"></span>Volume &amp; range expansion</button>
+          <button class="det on" data-det="rsi"><span class="sw" aria-hidden="true"></span>RSI extension warning</button>
+        </div>
+        <div class="warn-box"><b>Honest limitation:</b> this version is built for a spare phone keeping the AI screen open during market hours. Always-on microphone and full-duplex conversation (VAD, streaming STT, interruptible speech) are the documented next layer — <b>not yet built</b>.</div>
+        <div class="hflow" aria-label="Voice agent pipeline">
+          <span class="hn">Live feed</span><span class="ha">→</span><span class="hn">1m snapshot</span><span class="ha">→</span><span class="hn">15m aggregator</span><span class="ha">→</span><span class="hn">Watcher</span><span class="ha">→</span><span class="hn">Event queue</span><span class="ha">→</span><span class="hn">Text-to-speech</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. TELEGRAM ============ -->
+  <section id="telegram">
+    <p class="label">Feature 04 · Telegram Signals → Paper Orders</p>
+    <div class="sec-head">
+      <h2>Your Telegram calls, <span class="accent-g">parsed into paper orders</span></h2>
+      <p>TradePrime can monitor <strong>one Telegram group or channel</strong> through your own bot, parse supported <strong>NIFTY / SENSEX CE/PE calls</strong>, and create <strong>local paper orders</strong>. The bot token and your signed server session live in <strong>Android SecureStore</strong> — never in the APK and never in the SQLite database. Polling runs every five seconds while the app is open and active.</p>
+    </div>
+
+    <div class="g2" style="align-items:start">
+      <div class="card">
+        <h3>Try the parser</h3>
+        <p style="color:var(--muted);font-size:14px;margin-top:0">This is the same job the in-app parser test does on the setup screen. Edit the message and parse it:</p>
+        <label class="mono" for="tgText" style="font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">Telegram message</label>
+        <textarea class="tg-input" id="tgText" rows="5">BUY NIFTY 24500 CE
+CMP 112.50
+TGT 130
+SL 102</textarea>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+          <button class="btn btn-solid btn-sm" id="tgParse">Parse Message</button>
+          <button class="btn btn-outline btn-sm" id="tgSample2">Load SENSEX example</button>
+        </div>
+        <p style="color:var(--muted);font-size:13.5px;margin-bottom:0">Setup in the app: create a bot with @BotFather → add it to the group (privacy mode off) or as a channel admin → enter token + chat ID under NIFTY → Telegram Signals → Verify and Connect. Only messages posted after connection are processed.</p>
+      </div>
+
+      <div>
+        <div class="order-card" id="orderCard" aria-live="polite">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+            <b style="font-size:16px">Parsed paper order</b>
+            <span class="paper-tag">PAPER ORDER ONLY</span>
+          </div>
+          <div class="order-grid">
+            <div><span>Action</span><b id="ordAction">BUY</b></div>
+            <div><span>Instrument</span><b id="ordInst">NIFTY 24500 CE</b></div>
+            <div><span>Entry / CMP</span><b id="ordEntry">112.50</b></div>
+            <div><span>Target</span><b id="ordTgt">130</b></div>
+            <div><span>Stop loss</span><b id="ordSl">102</b></div>
+            <div><span>Status</span><b>Local paper order</b></div>
+          </div>
+          <p id="ordMsg" style="color:var(--muted);font-size:13.5px;margin:12px 0 0">Parsed from the sample message. In the app, duplicate Telegram message IDs are ignored and the daily paper-trade limit is enforced locally.</p>
+        </div>
+        <div class="alert-box"><b>Live orders stay locked.</b> Telegram signals create paper orders only. Live routing is deliberately not enabled — expiry selection, instrument-key lookup, lot-size conversion, duplicate-order protection and exit-message handling must be validated first. That caution is by design.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5. MORE FEATURES ============ -->
+  <section id="more">
+    <p class="label">Feature 05 · The Rest of the App</p>
+    <div class="sec-head">
+      <h2>More than the AI: <span class="accent">a full trading companion</span></h2>
+      <p>The local AI sits inside a complete app — copying, analysis, alerts, strategies and a broker connection, with a standalone mode that works without the server.</p>
+    </div>
+    <div class="g3">
+      <div class="mini"><div class="ic" aria-hidden="true">👥</div><b>Trade Copier</b><p>A dedicated Trade Copier screen for following and copying trade setups inside the app.</p></div>
+      <div class="mini"><div class="ic" aria-hidden="true">📊</div><b>Trade Analyser</b><p>A Trade Analyser screen to review trades after the fact — what was taken, and how it played out.</p></div>
+      <div class="mini"><div class="ic" aria-hidden="true">🔔</div><b>Price Alerts</b><p>Alerts with a create-alert flow, backed by the API server's strategies / alerts / webhooks support.</p></div>
+      <div class="mini"><div class="ic" aria-hidden="true">🤖</div><b>Bots &amp; Strategies</b><p>The Available Strategies list — where Cloud TradePrime AI and Local TradePrime AI sit side by side, so the on-device path is a first-class strategy, not a hidden setting.</p></div>
+      <div class="mini"><div class="ic" aria-hidden="true">💾</div><b>Standalone + Local SQLite</b><p>The app keeps local SQLite storage and works as a standalone Android app without the server — the local AI, paper orders and settings live on the phone.</p></div>
+      <div class="mini"><div class="ic" aria-hidden="true">🔐</div><b>Upstox Integration</b><p>Pair the phone once with the server, then “Login with Upstox” each trading day. OAuth runs in the broker's own browser flow; the client secret and access token stay server-side — the app only receives connection status and the broker profile. NIFTY execution settings are edited in-app and saved to the server.</p></div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <h3>Supporting API server</h3>
+      <p style="color:var(--muted);font-size:14.5px;margin:0">Behind the app sits an <strong style="color:var(--ink)">Express API server with PostgreSQL and Drizzle ORM</strong> — it supports strategies, alerts and webhooks, holds the Upstox session server-side, and serves the signed session the phone pairs with. The repo is a <strong style="color:var(--ink)">pnpm monorepo</strong>: mobile app, API server, database schema and generated API client (Orval from the OpenAPI spec) in one workspace.</p>
+      <div class="hflow"><span class="hn">artifacts/mobile <small>— Expo app</small></span><span class="ha">+</span><span class="hn">artifacts/api-server <small>— Express</small></span><span class="ha">+</span><span class="hn">lib/db <small>— Drizzle schema</small></span><span class="ha">+</span><span class="hn">lib/api-* <small>— spec + generated client</small></span></div>
+    </div>
+  </section>
+
+  <!-- ============ STACK ============ -->
+  <section id="stack">
+    <p class="label">Tech Stack</p>
+    <div class="sec-head"><h2>Built with</h2></div>
+    <div class="skills-panel">
+      <div class="skill-group">
+        <div class="skill-group-head"><span class="ic" aria-hidden="true">📱</span><h3>Mobile App</h3><span class="count">05</span></div>
+        <ul class="skill-list">
+          <li><span class="sdot"></span>Expo / React Native<span class="tag">New Arch</span></li>
+          <li><span class="sdot"></span>TypeScript</li>
+          <li><span class="sdot"></span>llama.rn<span class="tag">on-device LLM</span></li>
+          <li><span class="sdot"></span>expo-speech · speech recognition</li>
+          <li><span class="sdot"></span>SQLite + Android SecureStore</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-head"><span class="ic" aria-hidden="true">🧠</span><h3>Local AI</h3><span class="count">04</span></div>
+        <ul class="skill-list">
+          <li><span class="sdot"></span>Qwen3 0.6B GGUF<span class="tag">~397 MB</span></li>
+          <li><span class="sdot"></span>Qwen3 1.7B GGUF<span class="tag">~1.1 GB</span></li>
+          <li><span class="sdot"></span>Deterministic engine<span class="tag">EMA·RSI·ATR·VWAP</span></li>
+          <li><span class="sdot"></span>Voice watcher<span class="tag">12s scan</span></li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-head"><span class="ic" aria-hidden="true">🖥️</span><h3>Server &amp; Data</h3><span class="count">05</span></div>
+        <ul class="skill-list">
+          <li><span class="sdot"></span>Express 5 API server</li>
+          <li><span class="sdot"></span>PostgreSQL + Drizzle ORM</li>
+          <li><span class="sdot"></span>Binance live market data</li>
+          <li><span class="sdot"></span>Upstox OAuth<span class="tag">server-side token</span></li>
+          <li><span class="sdot"></span>pnpm monorepo · Orval codegen</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="honest">
+      <h3>⚠ Honest status — please read</h3>
+      <p>TradePrime is a <b>personal project</b>. Everything on this page is analysis and paper functionality: the local AI explains market structure, Telegram signals create <b>paper orders only</b>, and live order placement for signals stays locked. This page makes <b>no performance, return or win-rate claims</b>, and nothing here is investment advice. Sample numbers in the demos are labelled samples showing the panel layout — they are not live prices or results.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="foot-brand">TradePrime <span>— Local AI</span></p>
+    <p>An Android trading app with the AI built in: on-device Qwen3 via llama.rn, a deterministic analysis engine, a voice market agent, and Telegram-to-paper-order signals. Personal project by Varun Dusane · App v1.3.3 · Paper only — not investment advice.</p>
+    <div class="foot-row">
+      <a class="btn btn-outline btn-sm" href="../">&larr; Back to Portfolio</a>
+      <a class="btn btn-outline btn-sm" href="#top">Back to top <span aria-hidden="true">&uarr;</span></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  /* Mobile menu */
+  var menuBtn=document.getElementById('menuBtn'), navLinks=document.getElementById('navLinks');
+  if(menuBtn&&navLinks){
+    menuBtn.addEventListener('click',function(){
+      var open=navLinks.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded',open?'true':'false');
+    });
+    navLinks.addEventListener('click',function(e){
+      if(e.target.tagName==='A'){navLinks.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');}
+    });
+  }
+
+  /* ---- 1. Engine state toggle (Fallback / Qwen3) ---- */
+  var tabF=document.getElementById('tabFallback'), tabQ=document.getElementById('tabQwen');
+  var eDot=document.getElementById('engineDot'), eLabel=document.getElementById('engineLabel'), eText=document.getElementById('engineText');
+  function setEngine(qwen){
+    tabF.className=qwen?'':'on-light'; tabQ.className=qwen?'on-teal':'';
+    eDot.className='engine-dot'+(qwen?' qwen':'');
+    if(qwen){
+      eLabel.textContent='Engine: Qwen3 0.6B (or 1.7B High Accuracy)';
+      eText.textContent='Same deterministic analysis — plus a concise companion explanation written by the Qwen model running on this phone via llama.rn. No cloud AI call is made.';
+    }else{
+      eLabel.textContent='Engine: Fallback';
+      eText.textContent='Deterministic BTC analysis is returned in full — bias, levels, stop and targets. The companion note is the engine\u2019s own templated summary, because no local model is present.';
+    }
+  }
+  tabF.addEventListener('click',function(){setEngine(false);});
+  tabQ.addEventListener('click',function(){setEngine(true);});
+
+  /* ---- 2. Analysis demo (SAMPLE data) ---- */
+  var scenarios={
+    btc:{sym:'BTCUSDT · SAMPLE',bias:'Bullish',cls:'bull',regime:'Regime: Trend up · Rec: Hold long',conf:72,
+      inds:[['Price (sample)','97,420'],['EMA 20 / 50','96,980 / 95,610'],['EMA 200','91,240'],['RSI14','61.4'],['ATR14','612 (0.63%)'],['VWAP','96,540'],['Vol ratio','1.28×'],['5m / 15m / 60m','+0.2% / +0.6% / +1.4%'],['Support / Resist.','96,540 / 98,150']],
+      entry:'96,900 – 97,150',sl:'96,280',tgts:'98,150 / 99,020 / 100,400',rr:'1 : 2.1',
+      notes:['Reasons: price above EMA stack and VWAP; RSI firm but not extended.','Invalidation: 15m close below 96,280 (sample stop).','Risk note: sample panel only — figures illustrate the layout, not a live call.']},
+    side:{sym:'BTCUSDT · SAMPLE',bias:'Sideways',cls:'side',regime:'Regime: Range · Rec: Wait',conf:54,
+      inds:[['Price (sample)','97,050'],['EMA 20 / 50','97,010 / 96,990'],['EMA 200','91,240'],['RSI14','49.8'],['ATR14','388 (0.40%)'],['VWAP','97,030'],['Vol ratio','0.82×'],['5m / 15m / 60m','0.0% / −0.1% / +0.2%'],['Support / Resist.','96,420 / 97,680']],
+      entry:'Wait — no zone',sl:'—',tgts:'97,680 / — / —',rr:'—',
+      notes:['Reasons: EMAs flat and interleaved; price pinned to VWAP; volume below average.','Recommendation logic: no edge inside the range — wait for a break or a retest.','Risk note: sample panel only — figures illustrate the layout, not a live call.']},
+    nifty:{sym:'NIFTY · SAMPLE',bias:'Bullish',cls:'bull',regime:'Regime: Uptrend · Rec: Trail stop',conf:66,
+      inds:[['Price (sample)','24,612'],['EMA 20 / 50','24,540 / 24,388'],['EMA 200','23,910'],['RSI14','58.2'],['ATR14','86 (0.35%)'],['VWAP','24,505'],['Vol ratio','1.12×'],['5m / 15m / 60m','+0.1% / +0.3% / +0.5%'],['Support / Resist.','24,505 / 24,720']],
+      entry:'24,540 – 24,590',sl:'24,452',tgts:'24,720 / 24,815 / 24,940',rr:'1 : 1.9',
+      notes:['Reasons: holding above VWAP with a rising EMA stack (sample).','Recommendation logic: already extended from entry — trail the stop instead of chasing.','Risk note: sample panel only — figures illustrate the layout, not a live call.']}
+  };
+  var anInds=document.getElementById('anInds');
+  function renderScenario(key){
+    var s=scenarios[key];
+    document.getElementById('anSymbol').textContent=s.sym;
+    var b=document.getElementById('anBias'); b.textContent=s.bias; b.className='bias-big '+s.cls;
+    document.getElementById('anRegime').textContent=s.regime;
+    document.getElementById('anConf').textContent=s.conf+'%';
+    document.getElementById('anConfBar').style.width=s.conf+'%';
+    document.getElementById('anEntry').textContent=s.entry;
+    document.getElementById('anSl').textContent=s.sl;
+    document.getElementById('anTgts').textContent=s.tgts;
+    document.getElementById('anRr').textContent=s.rr;
+    anInds.innerHTML=s.inds.map(function(p){return '<div class="ind"><span>'+p[0]+'</span><b>'+p[1]+'</b></div>';}).join('');
+    document.getElementById('anNotes').innerHTML=s.notes.map(function(n){return '<li>'+n+'</li>';}).join('');
+    document.getElementById('scBtc').className=key==='btc'?'on-teal':'';
+    document.getElementById('scSide').className=key==='side'?'on-teal':'';
+    document.getElementById('scNifty').className=key==='nifty'?'on-teal':'';
+  }
+  document.getElementById('scBtc').addEventListener('click',function(){renderScenario('btc');});
+  document.getElementById('scSide').addEventListener('click',function(){renderScenario('side');});
+  document.getElementById('scNifty').addEventListener('click',function(){renderScenario('nifty');});
+  renderScenario('btc');
+
+  /* ---- 3. Voice agent demo ---- */
+  var detState={break:1,retest:1,ob:1,vwap:1,ema:1,vol:1,rsi:1};
+  var detBtns=document.querySelectorAll('#detGrid .det');
+  detBtns.forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var k=btn.getAttribute('data-det');
+      detState[k]=detState[k]?0:1;
+      btn.classList.toggle('on',!!detState[k]);
+      btn.classList.toggle('off',!detState[k]);
+    });
+  });
+  var voiceOn=false, voiceTimer=null, voiceStep=0;
+  var vLog=document.getElementById('voiceLog'), vStatus=document.getElementById('voiceStatus'), vText=document.getElementById('voiceStatusText'), vBtn=document.getElementById('voiceToggle');
+  var events=[
+    {det:'vwap',t:'12s',msg:'BTC reclaimed VWAP on the 1-minute close — short-term bias flips up while it holds.'},
+    {det:'break',t:'24s',msg:'NIFTY broke 1-minute resistance — watching for a hold above the level.'},
+    {det:'vol',t:'36s',msg:'Volume and range expanding on BTC — moves are getting faster, size carefully.'},
+    {det:'retest',t:'48s',msg:'BTC 15-minute retest of the broken level is holding so far.'},
+    {det:'rsi',t:'60s',msg:'RSI extension warning on NIFTY — momentum is stretched, avoid chasing.'},
+    {det:'ema',t:'72s',msg:'BTC lost EMA20 on the 1-minute — intraday strength fading.'},
+    {det:'ob',t:'84s',msg:'Price retesting a bullish order-block zone on the 15-minute (lightweight detection).'}
+  ];
+  function speakLine(t,msg){
+    var d=document.createElement('div'); d.className='vline spoken';
+    d.innerHTML='<span class="vt">'+t+'</span><span>'+msg+'</span>';
+    vLog.appendChild(d);
+    while(vLog.children.length>6){vLog.removeChild(vLog.firstChild);}
+  }
+  function tickVoice(){
+    if(voiceStep>=events.length){voiceStep=0;}
+    var ev=events[voiceStep]; voiceStep++;
+    if(detState[ev.det]){speakLine(ev.t,ev.msg);}
+    else{
+      var d=document.createElement('div'); d.className='vline';
+      d.innerHTML='<span class="vt">'+ev.t+'</span><span>Event detected but its detector is OFF — not spoken. (Toggle it back on above.)</span>';
+      vLog.appendChild(d);
+      while(vLog.children.length>6){vLog.removeChild(vLog.firstChild);}
+    }
+  }
+  function setVoice(on){
+    voiceOn=on;
+    vStatus.classList.toggle('live',on);
+    vText.textContent=on?'Voice agent running — scanning BTC + NIFTY every 12s (demo pace)':'Voice agent stopped';
+    vBtn.textContent=on?'⏸ Stop Voice Agent':'▶ Start Voice Agent';
+    if(on){
+      vLog.innerHTML='';
+      speakLine('0s','Voice agent started. Watching BTC and NIFTY. Screen keep-awake is on.');
+      voiceStep=0; tickVoice();
+      voiceTimer=setInterval(tickVoice,2600);
+    }else if(voiceTimer){clearInterval(voiceTimer); voiceTimer=null;}
+  }
+  vBtn.addEventListener('click',function(){setVoice(!voiceOn);});
+  document.getElementById('voiceSpeak').addEventListener('click',function(){
+    speakLine('now','Summary: BTC is above VWAP with a rising short-term trend in this demo snapshot; NIFTY is near its intraday resistance. No action suggested — analysis only.');
+  });
+
+  /* ---- 4. Telegram parser demo ---- */
+  var tgText=document.getElementById('tgText');
+  function parseTg(){
+    var raw=tgText.value||'';
+    var up=raw.toUpperCase();
+    var action=/\bSELL\b/.test(up)?'SELL':(/\bBUY\b/.test(up)?'BUY':'—');
+    var inst=/SENSEX/.test(up)?'SENSEX':(/\bNIFTY\b/.test(up)?'NIFTY':'—');
+    var oe=/\bPE\b/.test(up)?'PE':(/\bCE\b/.test(up)?'CE':'—');
+    var strikeM=up.match(/\b(\d{5})\b/);
+    var strike=strikeM?strikeM[1]:'—';
+    function numAfter(labels){
+      for(var i=0;i<labels.length;i++){
+        var m=up.match(new RegExp(labels[i]+'[^0-9]{0,6}([0-9]+(?:\\.[0-9]+)?)'));
+        if(m)return m[1];
+      }
+      return null;
+    }
+    var entry=numAfter(['ENTRY','CMP']);
+    var tgt=numAfter(['TARGET','TGT']);
+    var sl=numAfter(['STOP LOSS','SL']);
+    document.getElementById('ordAction').textContent=action;
+    document.getElementById('ordInst').textContent=(inst==='—'?'—':inst+' '+strike+' '+oe);
+    document.getElementById('ordEntry').textContent=entry||'Not in message';
+    document.getElementById('ordTgt').textContent=tgt||'Optional — none';
+    document.getElementById('ordSl').textContent=sl||'Optional — none';
+    var msg=document.getElementById('ordMsg');
+    if(action==='—'||inst==='—'||oe==='—'||strike==='—'){
+      msg.textContent='Could not read a full call — the parser needs BUY/SELL, NIFTY or SENSEX, a strike, and CE or PE. Try one of the sample formats.';
+    }else{
+      msg.textContent='Parsed successfully. In the app this becomes a LOCAL PAPER order — duplicate message IDs are ignored and the daily paper-trade limit is enforced locally. No live order is placed.';
+    }
+  }
+  document.getElementById('tgParse').addEventListener('click',parseTg);
+  document.getElementById('tgSample2').addEventListener('click',function(){
+    tgText.value='BUY SENSEX PE 78800\nEntry: 385\nTarget: 420\nStop Loss: 370';
+    parseTg();
+  });
+  parseTg();
+})();
+</script>
+</body>
+</html>
