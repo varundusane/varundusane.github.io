@@ -66,7 +66,7 @@
       }
       .topbar{
         display:flex; align-items:center; gap:14px; flex-wrap:wrap;
-        padding:10px 0;
+        padding:6px 0;
       }
       .prompt-id{ font-weight:700; color:var(--text); white-space:nowrap; font-size:15px; }
       .prompt-id .u{ color:var(--green); }
@@ -74,7 +74,7 @@
       nav.main{ margin-left:auto; display:flex; gap:4px; flex-wrap:wrap; }
       nav.main a{
         color:var(--muted); text-decoration:none; font-size:14px;
-        padding:10px 10px; min-height:40px; display:inline-flex; align-items:center;
+        padding:7px 9px; min-height:36px; display:inline-flex; align-items:center;
         border:1px solid transparent; border-radius:6px;
       }
       nav.main a::before{ content:"./"; color:var(--faint); }
@@ -96,14 +96,14 @@
         display:flex; align-items:center; gap:8px;
         background:var(--panel-2);
         border-bottom:1px solid var(--line-soft);
-        padding:9px 14px;
+        padding:7px 14px;
         font-size:13px; color:var(--muted);
       }
       .dot{ width:12px; height:12px; border-radius:50%; flex:none; }
       .dot.r{ background:var(--red); } .dot.y{ background:var(--yellow); } .dot.g{ background:var(--tl-green); }
       .term-bar .title{ margin-left:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
       .term-bar .right{ margin-left:auto; color:var(--faint); font-size:12px; white-space:nowrap; }
-      .term-body{ padding:18px 26px; line-height:1.55; }
+      .term-body{ padding:13px 24px; line-height:1.45; }
 
       .cmd{ color:var(--green); font-weight:600; }
       .cmd::before{ content:"$ "; color:var(--amber); }
@@ -119,28 +119,28 @@
       @keyframes blink{ 0%,55%{opacity:1} 56%,100%{opacity:0} }
 
       /* ---------- hero ---------- */
-      .hero{ padding:24px 0 22px; }
+      .hero{ padding:14px 0 18px; }
       .hero-grid{
         display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);
         gap:22px; align-items:start;
       }
-      .session-line{ margin:0 0 4px; font-size:15px; }
+      .session-line{ margin:0 0 2px; font-size:14px; }
       .whoami-out{
-        font-size:clamp(30px, 4.4vw, 42px);
-        line-height:1.12; font-weight:700; color:var(--text);
-        margin:2px 0 12px; letter-spacing:-.01em;
+        font-size:clamp(25px, 3.2vw, 33px);
+        line-height:1.08; font-weight:700; color:var(--text);
+        margin:2px 0 7px; letter-spacing:-.01em;
       }
-      .whoami-out .role{ color:var(--green); display:block; font-size:.52em; font-weight:600; margin-top:6px; letter-spacing:0; }
+      .whoami-out .role{ color:var(--green); display:block; font-size:.52em; font-weight:600; margin-top:4px; letter-spacing:0; }
       .headline{
-        font-size:clamp(20px, 2.5vw, 27px);
-        line-height:1.3; font-weight:600; color:var(--green-bright);
-        margin:2px 0 12px;
+        font-size:clamp(17px, 1.9vw, 21px);
+        line-height:1.22; font-weight:600; color:var(--green-bright);
+        margin:2px 0 7px;
         text-shadow:0 0 18px rgba(74,222,128,.25);
       }
-      .tagline{ color:var(--amber); font-size:15px; margin:2px 0 12px; }
+      .tagline{ color:var(--amber); font-size:14px; margin:2px 0 7px; }
       .status-line{
         display:flex; align-items:center; gap:10px; flex-wrap:wrap;
-        font-size:14.5px; margin:9px 0 2px;
+        font-size:14.5px; margin:6px 0 2px;
       }
       .status-dot{
         width:9px; height:9px; border-radius:50%; background:var(--phosphor);
@@ -153,11 +153,11 @@
       .status-line .loc{ color:var(--muted); }
       .prev-line{ font-size:14px; color:var(--muted); margin:4px 0 0; }
       .prev-line .k{ color:var(--faint); }
-      .hero-ctas{ display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
+      .hero-ctas{ display:flex; gap:12px; flex-wrap:wrap; margin-top:11px; }
       .btn{
         display:inline-flex; align-items:center; gap:8px;
-        min-height:46px; padding:10px 18px;
-        font-family:inherit; font-size:15px; font-weight:600;
+        min-height:42px; padding:8px 16px;
+        font-family:inherit; font-size:14.5px; font-weight:600;
         text-decoration:none; border-radius:6px; cursor:pointer;
         border:1px solid var(--green-dim);
         color:#04140a; background:var(--green);
@@ -174,7 +174,7 @@
       .photo-frame{ position:relative; flex:none; width:100%; aspect-ratio:4/5; overflow:hidden; background:#060906; }
       .photo-frame img{
         position:absolute; inset:0; width:100%; height:100%;
-        object-fit:cover; object-position:50% 40%;
+        object-fit:cover; object-position:50% 30%;
       }
       .photo-meta{
         padding:12px 16px; font-size:13px; color:var(--muted);
@@ -342,7 +342,7 @@
       /* ---------- responsive ---------- */
       @media (max-width: 900px){
         .hero-grid{ grid-template-columns:1fr; }
-        .photo-frame img{ object-position:50% 40%; }
+        .photo-frame img{ object-position:50% 30%; }
         .stats{ grid-template-columns:1fr 1fr; }
         .proj-grid, .cols-2, .contact-grid{ grid-template-columns:1fr; }
         .cols-4{ grid-template-columns:1fr 1fr; }
@@ -411,15 +411,15 @@
                 <span><span class="k">status:</span> <span class="v">available_for_work</span></span>
                 <span class="loc">— Pune, India · remote-first (India) · hybrid Mumbai / Bengaluru</span>
               </p>
-              <p class="prev-line"><span class="k">previously_at:</span> Ingram Micro · Magmarkd · TechnoInnovation</p>
-
               <div class="hero-ctas">
                 <a class="btn" href="#contact">[ ./lets-talk ]</a>
                 <a class="btn ghost" href="#work">[ ./view-projects ]</a>
                 <a class="btn amber" href="Varun_Dusane_CV.pdf" download="Varun_Dusane_CV.pdf">[ ./download-cv.pdf ]</a>
               </div>
 
-              <p class="session-line" style="margin-top:14px;"><span class="cmd">uptime</span> <span class="out">— 8+ yrs in production, 3 clouds, 0 excuses</span> <span class="cursor" aria-hidden="true"></span></p>
+              <p class="prev-line" style="margin-top:12px;"><span class="k">previously_at:</span> Ingram Micro · Magmarkd · TechnoInnovation</p>
+
+              <p class="session-line" style="margin-top:10px;"><span class="cmd">uptime</span> <span class="out">— 8+ yrs in production, 3 clouds, 0 excuses</span> <span class="cursor" aria-hidden="true"></span></p>
             </div>
           </div>
 
@@ -427,7 +427,7 @@
             <div class="term-bar">
               <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
               <span class="title">profile.jpg — image render</span>
-              <span class="right">1152×2048</span>
+              <span class="right">1000×1400</span>
             </div>
             <div class="photo-frame">
               <img src="profile.jpg" alt="Portrait of Varun Dusane wearing a black leather jacket and sunglasses" />
